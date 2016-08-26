@@ -83,7 +83,10 @@ public class mainpanel extends JFrame {
 		
 		Browser browser = new Browser();
 		browser.setLoadHandler(null);
-    	browser.loadURL("file:///home/milad/workspace/vis_project/src/map.html");
+		
+		File f = new File("src/map.html");
+		String mapPath = f.getAbsolutePath();
+    	browser.loadURL("file:///" + mapPath);
 		BrowserView bView = new BrowserView(browser);
 		
 		

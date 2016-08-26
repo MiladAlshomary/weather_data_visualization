@@ -5,7 +5,7 @@ import java.io.FileReader;
 
 import com.opencsv.CSVReader;
 
-public class MainConteroller {
+public class MainController {
 	
     public static void main(String[] args) {
     	
