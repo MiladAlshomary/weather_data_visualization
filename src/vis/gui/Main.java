@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,10 +23,14 @@ import javax.swing.JSlider;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
-public class mainpanel extends JFrame {
+import parser.CSVParser;
+
+public class Main extends JFrame {
 
 	private JPanel contentPane;
 	private final JFileChooser fc = new JFileChooser();
+	
+	static private List<Map<String, String>> data;
 	
 	/**
 	 * Launch the application.
@@ -32,7 +39,10 @@ public class mainpanel extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					mainpanel frame = new mainpanel();
+		    		// Read file
+					data = CSVParser.getData( CSVParser.readFileFromResources("data.csv") );
+					
+					Main frame = new Main();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +54,7 @@ public class mainpanel extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public mainpanel() {
+	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -62,31 +72,28 @@ public class mainpanel extends JFrame {
 		JButton load = new JButton("Load File");
 		toolBar.add(load);
 		
+		// Load CSV button
 		load.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
 		  {
 			  if (e.getSource() == load) {
 			        int returnVal = fc.showOpenDialog(contentPane);
+			        
+			        // If user approves the select file
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
-			            File file = fc.getSelectedFile();
-			            int y =44;
-			            y++;
-			        } else {
-			            int x = 100;
-			            x++;
+			            // Reload the user-selected CSV file
+						data = CSVParser.getData(fc.getSelectedFile());
 			        }
 			   }
-
 		  }
 		});
 		
 		Browser browser = new Browser();
 		browser.setLoadHandler(null);
 		
-		File f = new File("src/map.html");
-		String mapPath = f.getAbsolutePath();
-    	browser.loadURL("file:///" + mapPath);
+		URL mapURL = getClass().getClassLoader().getResource("map.html");
+    	//browser.loadURL(mapURL);
 		BrowserView bView = new BrowserView(browser);
 		
 		
