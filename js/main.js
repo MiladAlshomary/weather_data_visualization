@@ -105,41 +105,6 @@ function getTriangleArea(aa, bb, cc){
 	return cross(ab, ac) / 2;
 }
 
-function getPointColor(triangle, p){
-	// find u, v and w
-	// u = CAP_Area / ABC_Area
-	// v = ABP_Area / ABC_Area
-	// w = BCP_Area / ABC_Area
-	
-	var a = triangle[0];
-	var b = triangle[1];
-	var c = triangle[2];
-
-	// Get area of ABC triangle (the triangle we are currently in in the loop!)
-	var ABC_Area = getTriangleArea(a, b, c);
-
-	// Get area of all 3 triangles that sum up to 1 inside ABC (passing by point P)
-	var CAP_Area = getTriangleArea(c, a, p);
-	var ABP_Area = getTriangleArea(a, b, p);
-
-	var u = CAP_Area / ABC_Area;
-	var v = ABP_Area / ABC_Area;
-
-	var pVal = u * a.val + v * b.val + (1-u-v) * c.val;
-
-		// Normalization
-	var normalizedAttributeVal = ( (pVal - minAttributeVal) / (maxAttributeVal - minAttributeVal) );
-	var aR = 0;   var aG = 0; var aB=255;  // blue
-	var bR = 255; var bG = 0; var bB=0;    // red
-
-	var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
-	var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
-	var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
-
-	return [red, green, blue, 1];
-}
-
-
 USGSOverlay.prototype.draw = function() {
 	var canvas = this.canvas_;
 	// We use the south-west and north-east
@@ -172,39 +137,43 @@ USGSOverlay.prototype.draw = function() {
 	
 	var triangleGradient = function(point){
 		
-		// find u, v and w
-		// u = CAP_Area / ABC_Area
-		// v = ABP_Area / ABC_Area
-		// w = BCP_Area / ABC_Area
 		
-		var a = t[0];
-		var b = t[1];
-		var c = t[2];
-
-		// Get area of ABC triangle (the triangle we are currently in in the loop!)
-		var ABC_Area = getTriangleArea(a, b, c);
-
-		// Get area of all 3 triangles that sum up to 1 inside ABC (passing by point P)
-		var CAP_Area = getTriangleArea(c, a, point);
-		var ABP_Area = getTriangleArea(a, b, point);
-
-		var u = CAP_Area / ABC_Area;
-		var v = ABP_Area / ABC_Area;
-
-		var pVal = u * a.val + v * b.val + (1-u-v) * c.val;
-
-			// Normalization
-		var normalizedAttributeVal = ( (pVal - $finalDataMinVal) / ($finalDataMaxVal - $finalDataMinVal) );
-		var aR = 0;   var aG = 0; var aB=255;  // blue
-		var bR = 255; var bG = 0; var bB=0;    // red
-
-		var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
-		var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
-		var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
-
-		return [red, green, blue, 1];
+		if ( !t.containsPoint(point) ){
+			return [0, 0, 0, 0];
+		}
 		
-		return color;
+		else{
+			// find u, v and w
+			// u = CAP_Area / ABC_Area
+			// v = ABP_Area / ABC_Area
+			
+			var a = t[0];
+			var b = t[1];
+			var c = t[2];
+			
+			// Get area of ABC triangle (the triangle we are currently in in the loop!)
+			var ABC_Area = getTriangleArea(a, b, c);
+
+			// Get area of all 3 triangles that sum up to 1 inside ABC (passing by point P)
+			var CAP_Area = getTriangleArea(c, a, point);
+			var ABP_Area = getTriangleArea(a, b, point);
+
+			var u = CAP_Area / ABC_Area;
+			var v = ABP_Area / ABC_Area;
+
+			var pVal = u * a.attributes.air_temperature + v * b.attributes.air_temperature + (1-u-v) * c.attributes.air_temperature;
+
+				// Normalization
+			var normalizedAttributeVal = ( (pVal - $finalDataMinVal) / ($finalDataMaxVal - $finalDataMinVal) );
+			var aR = 0;   var aG = 0; var aB=255;  // blue
+			var bR = 255; var bG = 0; var bB=0;    // red
+
+			var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
+			var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
+			var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
+
+			return [red, green, blue, 255];
+		}
 	}
 	
 	process(this.canvas_, triangleGradient);
