@@ -218,6 +218,9 @@ Point.prototype = {
     round: function() {
         return this._operationTemplate(null, function(a) {return Math.round(a)});
     },
+    hashCode: function() {
+        return (this.x + "," + this.y).hashCode();
+    },
     _operationTemplate: function(other, op) {
         if(isNumber(other)) {
             return new Point(op(this.x, other), op(this.y, other));
@@ -281,4 +284,16 @@ Point.prototype = {
 
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+String.prototype.hashCode = function(){
+    var hash = 0;
+    if (this.length == 0) return hash;
+    
+    for (i = 0; i < this.length; i++) {
+        char = this.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
 }
