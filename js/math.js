@@ -66,6 +66,7 @@ Triangle.prototype = {
 function Circle(location, radius) {
     this.init(location, radius);
 }
+
 Circle.prototype = {
     init: function(location, radius) {
         this.location = location? new Point(location[0], location[1]): new Point();
@@ -105,10 +106,12 @@ Circle.prototype = {
 function Point(x, y) {
     this.init(x, y);
 }
+
 Point.prototype = {
-    init: function(x, y) {
+    init: function(x, y, attrs) {
         this.x = x? x: 0;
         this.y = y? y: 0;
+        this.attributes = attrs? attrs: {};
     },
     add: function(other) {
         return this._operationTemplate(other, function(a, b) {return a + b});
