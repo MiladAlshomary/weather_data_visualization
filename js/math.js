@@ -35,6 +35,9 @@ function project(target, initial, current) {
 
     return delta.mul(t.x + t.y).add(target);
 }
+function cross(a, b) {
+	return (a.x * b.y) - (a.y * b.x);
+}
 
 function dot(a, b) {
     return a.x * b.x + a.y * b.y;
@@ -56,7 +59,7 @@ Edge.prototype = {
     },
 
     hashCode: function() {
-        int hash = this.p1.hashCode() + this.p2.hashCode();
+        var hash = this.p1.hashCode() + this.p2.hashCode();
         return hash;
     },
 

@@ -11,7 +11,12 @@ USGSOverlay.prototype = new google.maps.OverlayView();
 function drawTriangulation() {
 	for (var i = triangles.length - 1; i >= 0; i--) {
 		t = triangles[i];
-		addOverlay(t)
+		t = new Triangle(
+				new Point(464, 134, {air_temperature: 19.3, Latitude: 53.633186, Longitude: 9.988085}),
+				new Point(432, 138, {air_temperature: 14, Latitude: 53.53316, Longitude: 8.576083}),
+				new Point(435, 125, {air_temperature: 23.8, Latitude: 53.871254, Longitude: 8.705821})
+	  );
+		addOverlay(t);
 	}
 }
 
@@ -93,6 +98,47 @@ USGSOverlay.prototype.onAdd = function() {
 	panes.overlayImage.appendChild(this.canvas_);
 };
 
+function getTriangleArea(aa, bb, cc){
+	var ab = bb.sub(aa);
+	var ac = cc.sub(aa);
+	
+	return cross(ab, ac) / 2;
+}
+
+function getPointColor(triangle, p){
+	// find u, v and w
+	// u = CAP_Area / ABC_Area
+	// v = ABP_Area / ABC_Area
+	// w = BCP_Area / ABC_Area
+	
+	var a = triangle[0];
+	var b = triangle[1];
+	var c = triangle[2];
+
+	// Get area of ABC triangle (the triangle we are currently in in the loop!)
+	var ABC_Area = getTriangleArea(a, b, c);
+
+	// Get area of all 3 triangles that sum up to 1 inside ABC (passing by point P)
+	var CAP_Area = getTriangleArea(c, a, p);
+	var ABP_Area = getTriangleArea(a, b, p);
+
+	var u = CAP_Area / ABC_Area;
+	var v = ABP_Area / ABC_Area;
+
+	var pVal = u * a.val + v * b.val + (1-u-v) * c.val;
+
+		// Normalization
+	var normalizedAttributeVal = ( (pVal - minAttributeVal) / (maxAttributeVal - minAttributeVal) );
+	var aR = 0;   var aG = 0; var aB=255;  // blue
+	var bR = 255; var bG = 0; var bB=0;    // red
+
+	var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
+	var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
+	var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
+
+	return [red, green, blue, 1];
+}
+
 
 USGSOverlay.prototype.draw = function() {
 	var canvas = this.canvas_;
@@ -100,9 +146,9 @@ USGSOverlay.prototype.draw = function() {
 	// coordinates of the overlay to peg it to the correct position and size.
 	// To do this, we need to retrieve the projection from the overlay.
 	var overlayProjection = this.getProjection();
-	var p1 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t.p1.lat, t.p1.lng));
-	var p2 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t.p2.lat, t.p2.lng));
-	var p3 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t.p3.lat, t.p3.lng));
+	var p1 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t[0].attributes.Latitude, t[0].attributes.Longitude));
+	var p2 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t[1].attributes.Latitude, t[1].attributes.Longitude));
+	var p3 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t[2].attributes.Latitude, t[2].attributes.Longitude));
 
 	var result = getBounds([p1, p2, p3]);
 
@@ -113,52 +159,55 @@ USGSOverlay.prototype.draw = function() {
 	canvas.style.height = (result.maxY - result.minY) + 'px';
 	canvas.style.opacity = 0.9;
 
-	p1 = convertPosition(p1, result, canvas.width, canvas.height);
-	p2 = convertPosition(p2, result, canvas.width, canvas.height);
-	p3 = convertPosition(p3, result, canvas.width, canvas.height);
+	var pp1 = convertPosition(p1, result, canvas.width, canvas.height);
+	var pp2 = convertPosition(p2, result, canvas.width, canvas.height);
+	var pp3 = convertPosition(p3, result, canvas.width, canvas.height);
+	
+	t[0].x = pp1.x;
+	t[0].y = pp1.y;
+	t[1].x = pp2.x;
+	t[1].x = pp2.y;
+	t[2].x = pp3.x;
+	t[2].x = pp3.y;
+	
+	var triangleGradient = function(point){
+		
+		// find u, v and w
+		// u = CAP_Area / ABC_Area
+		// v = ABP_Area / ABC_Area
+		// w = BCP_Area / ABC_Area
+		
+		var a = t[0];
+		var b = t[1];
+		var c = t[2];
 
+		// Get area of ABC triangle (the triangle we are currently in in the loop!)
+		var ABC_Area = getTriangleArea(a, b, c);
 
-	var triangle = new Triangle(
-        new Point(p1.x, p1.y),
-        new Point(p2.x, p2.y),
-        new Point(p3.x, p3.y));
+		// Get area of all 3 triangles that sum up to 1 inside ABC (passing by point P)
+		var CAP_Area = getTriangleArea(c, a, point);
+		var ABP_Area = getTriangleArea(a, b, point);
 
-    triangle[0].color = [1, 0, 0, 1]; // red
-    triangle[1].color = [0, 1, 0, 1]; // green
-    triangle[2].color = [0, 0, 1, 1]; // blue
-    
-    var triangleGradient = function(point) {
-	var DEFAULTCOLOR = [255, 0, 0, 0];
-	var ret = [0, 0, 0, 0];
-	for (var i = 0; i < 3; i++) {
-	    var v1 = triangle.edges[i][0];
-	    var v2 = triangle.edges[i][1];
-	    var v3 = triangle[i];
-	    
-	    var isect = intersectLines(v1, v2, v3, point);
-	    if (isect) {
-	        var pointVertexDist = distance(point, v3);
-	        var isectVertexDist = distance(isect, v3);
-	        if (pointVertexDist <= isectVertexDist) {
-	            var lerpFac = 1 - pointVertexDist /
-	                isectVertexDist;
-	            for (var j = 0; j < ret.length; j++) {
-	                ret[j] += v3.color[j] * lerpFac;
-	            }
-	        } else {
-	            return DEFAULTCOLOR;
-	        }
-	    } else {
-	        return DEFAULTCOLOR;
-	    }
+		var u = CAP_Area / ABC_Area;
+		var v = ABP_Area / ABC_Area;
+
+		var pVal = u * a.val + v * b.val + (1-u-v) * c.val;
+
+			// Normalization
+		var normalizedAttributeVal = ( (pVal - $finalDataMinVal) / ($finalDataMaxVal - $finalDataMinVal) );
+		var aR = 0;   var aG = 0; var aB=255;  // blue
+		var bR = 255; var bG = 0; var bB=0;    // red
+
+		var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
+		var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
+		var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
+
+		return [red, green, blue, 1];
+		
+		return color;
 	}
-	return ret;
-    }
-
-    process(this.canvas_, triangleGradient);
-
-
-
+	
+	process(this.canvas_, triangleGradient);
 };
 
 USGSOverlay.prototype.onRemove = function() {

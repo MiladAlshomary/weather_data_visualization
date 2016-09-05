@@ -1,3 +1,13 @@
+function setMinMaxValues(){
+	$.each($rawData, function(i, point){
+		var temperature = point.air_temperature;
+		if (parseInt(temperature)){
+			$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
+			$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
+		}
+	});
+}
+
 function getXY(lat, lng){
 	return $map.getProjection().fromLatLngToPoint(new google.maps.LatLng(lat, lng));
 }
@@ -18,7 +28,11 @@ $(window).load(function(){
 			console.log("Fetched data file...");
 			parseData(contents);
 			console.log("Parsed data file...");
+			
 			triangluate($finalData["2016-07-23T00:00:00Z"]);
+			
+			// set the data's min/ max vaues
+			setMinMaxValues();
 		};
 	});
 	
@@ -36,19 +50,18 @@ $(window).load(function(){
 			// Data
 			var data = lines.slice(1, lines.length);
 			
-			var tempData = {};
-			
 			$.each (data, function(i, entry){
-				tempData[i] = [];
+				$rawData[i] = [];
 				var entryData = entry.split(";");
 				$.each (entryData, function(ii, entryValue){
-					tempData[i][columns[ii]] = entryValue;
+					if ( columns[ii] == "air temperature" ) columns[ii] = "air_temperature";
+					$rawData[i][columns[ii]] = entryValue;
 				});
 			});
 			
 			var counter = 0;
 			var prevSize = 0;
-			$.each (tempData, function(k, pointData){
+			$.each ($rawData, function(k, pointData){
 				
 				// initialize array for specific time if not found
 				if ( $finalData[pointData.Date] === undefined ){
@@ -65,7 +78,7 @@ $(window).load(function(){
 				counter++;
 			});
 			
-			console.log($finalData);
+			// console.log($finalData);
 		
 	}// parseData
 
