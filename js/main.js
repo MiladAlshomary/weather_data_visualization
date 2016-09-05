@@ -7,23 +7,6 @@ var triangles = [
 ];
 
 USGSOverlay.prototype = new google.maps.OverlayView();
-google.maps.event.addDomListener(window, 'load', initMap);
-
-
-
-
-function initMap() {
-	var map = new google.maps.Map(document.getElementById('map'), {
-	  zoom: 5,
-	  center: {lat: 52.56441, lng: 13.308848},
-	  mapTypeId: 'roadmap'
-	});
-	
-	window.map = map;
-
-
-	//addOverlay(new google.maps.LatLng(62.281819, -150.287132), new google.maps.LatLng(62.400471, -150.005608), './images/heatmap.png')
-}
 
 function drawTriangulation() {
 	for (var i = triangles.length - 1; i >= 0; i--) {
@@ -35,11 +18,6 @@ function drawTriangulation() {
 function addOverlay(triangle){
 	// The photograph is courtesy of the U.S. Geological Survey.
 	window.overlay = new USGSOverlay(triangle, window.map);
-}
-
-function getXY(lat, lng) {
-	result = window.map.getProjection().fromLatLngToPoint(new google.maps.LatLng(lat, lng));
-	return result.x + "," + result.y;
 }
 
 function addMarker(lat, lng, name) {
