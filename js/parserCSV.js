@@ -4,14 +4,32 @@ function getXY(lat, lng){
 
 $(window).load(function(){
 	
+	// Browse and select a data file
+	$('#data-upload').on('change', function(ee){
+		var file = ee.target.files[0];
+		if (!file) {
+			return;
+		}
+		var reader = new FileReader
+		reader.readAsText(file);
+	
+		reader.onload = function(e) {
+			var contents = e.target.result;
+			console.log("Fetched data file...");
+			parseData(contents);
+			console.log("Parsed data file...");
+		};
+	});
+	
 	google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
-		parseData();
+		$("#data-upload").removeAttr("disabled");
 	});
 	
 	// Get data
-	function parseData(){
-		jQuery.get($HTML_SITE + 'data/data.csv', function(response) {
-			var lines = response.split('\n');      
+	function parseData(content){
+			if ( content == "" ) return false;
+			
+			var lines = content.split('\n');      
 			
 			// Columns
 			var columnsLine = lines[0];
@@ -50,7 +68,6 @@ $(window).load(function(){
 			});
 			
 			console.log($finalData);
-		});
 		
 	}// parseData
 
