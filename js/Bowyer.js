@@ -1,12 +1,27 @@
 //bowyer to implement dlnay trianglulation
 
 function triangluate(points) {
+	var triangles = [];
 	var bounds = getXYBoundingBox(points);
-	leftUpPoint = new Point(bounds.minX, bounds.minY);
-	leftDownPoint = new Point(bounds.minX, bounds.maxY);
-	rightUpPoint = new Point(bounds.maxX, bounds.minY);
-	rightDownPoint = new Point(bounds.maxX, bounds.maxY);
+	var leftUpPoint = new Point(bounds.minX, bounds.minY);
+	var leftDownPoint = new Point(bounds.minX, bounds.maxY);
+	var rightUpPoint = new Point(bounds.maxX, bounds.minY);
+	var rightDownPoint = new Point(bounds.maxX, bounds.maxY);
 
+	var superTri = getSuperTriangle(leftUpPoint, leftDownPoint, rightDownPoint, rightUpPoint);
+	triangles.push(superTri);
+	for (var i = points.length - 1; i >= 0; i--) {
+		var point = points[i];
+		var badTriangles = [];
+		for (var i = triangles.length - 1; i >= 0; i--) {
+			var t = triangles[i];
+			if(t.isInsideCircumcircle(point)) {
+				badTriangles.push(t);
+			}
+		}
+	}
+
+	
 }
 
 function getXYBoundingBox(points) {
@@ -54,5 +69,13 @@ function getSuperTriangle(leftUpPoint, leftDownPoint, rightDownPoint, rightUpPoi
 	var F = rightDownPoint.sub(leftDownPoint);
 
 	var P = new Point(- E.y, E.x);
-	float h = ()
+	var h = dot(leftUpPoint.sub(leftDownPoint), P)/dot(F,P);//( (A-C) * P ) / ( F * P )
+
+	F.x = F.x * h;
+	F.y = F.y * h;
+	var inteP = leftDownPoint.add(F);
+
+	var superTri = new Triangle(leftDownPoint, leftUpPoint, inteP);
+
+	return superTri;
 }
