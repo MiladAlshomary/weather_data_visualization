@@ -61,9 +61,9 @@ Triangle.prototype = {
             [this[0], this[1]]
         ];
 
-        this.center = getCenter();
-        this.radius = getRadius();
-    }
+        this.center = this.getCenter();
+        this.radius = this.getRadius();
+    },
 
     getCenter: function() {
         var a = this[1].x - this[0].x;
@@ -76,13 +76,13 @@ Triangle.prototype = {
         var px= (d*e-b*f)/g;
         var py= (a*f-c*e)/g;
         return new Point(px, py);
-    }
+    },
 
     getRadius: function() {
-        var x = this[0].x - center.x;
-        var y = this[0].y - center.y;
+        var x = this[0].x - this.center.x;
+        var y = this[0].y - this.center.y;
         return Math.sqrt(x*x+y*y);
-    }
+    },
 
     isInsideCircumcircle: function(p) {
         var x = p.x - this.center.x;
