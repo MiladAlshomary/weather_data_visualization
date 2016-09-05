@@ -13,36 +13,45 @@ function triangluate(points) {
 	for (var i = points.length - 1; i >= 0; i--) {
 		var point = points[i];
 		var badTriangles = [];
-		for (var i = triangles.length - 1; i >= 0; i--) {
-			var t = triangles[i];
+		for (var j = triangles.length - 1; j >= 0; j--) {
+			var t = triangles[j];
 			if(t.isInsideCircumcircle(point)) {
 				badTriangles.push(t);
 			}
 		}
 
-		var polygon = new HashSet();
-		var toRemove = new HashSet();
-		for (var i = badTriangles.length - 1; i >= 0; i--) {
-			var badT = badTriangles[i];
+		var polygon  = {};
+		var toRemove = {};
+		for (var k = badTriangles.length - 1; k >= 0; k--) {
+			var badT = badTriangles[k];
 			var badEdges = badT.getEdges();
-			for(var i = 2; i >= 0; i--) {
-				var edge = badEdges[i];
-				if(polygon.contains(edge)){
-					toRemove.add(edge);
+			for(var c = 2; c >= 0; c--) {
+				var edge = badEdges[c];
+				//console.log(edge);
+				if(edge.hashCode() in polygon){
+					toRemove[edge.hashCode()] = edge;
 				} else {
-					polygon.add(edge);
+					polygon[edge.hashCode()] = edge;
 				}
 			}
 		}
 
-		for (var i = 0; i < toRemove.length; i++) {
-			polygon.remove(toRemove[i]);
+		for(var b = 0; b < badTriangles.length ; b++){
+			var idx = triangles.indexOf(badTriangles[b]);
+			triangles.splice(idx, 1);
 		}
 
-		for (var i = polygon.length - 1; i >= 0; i--) {
-			var p = polygon[i];
-			var triangle = new Triangle(p.p1, p.p2, point);
+		for(var key in toRemove) {
+			delete polygon[key];
+			
 		}
+
+		for(var key in polygon) {
+			var p = polygon[key];
+			var triangle = new Triangle(p.p1, p.p2, point);
+			triangles.push(triangle);
+		}
+
 	}
 
 	var result = [];
@@ -55,7 +64,7 @@ function triangluate(points) {
 		}
 	}
 
-	return triangles;
+	return result;
 
 }
 

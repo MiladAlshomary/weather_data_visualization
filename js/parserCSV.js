@@ -29,7 +29,7 @@ $(window).load(function(){
 			parseData(contents);
 			console.log("Parsed data file...");
 			
-			triangluate($finalData["2016-07-23T00:00:00Z"]);
+			triangluate($finalData["2016-07-24T23:00:00Z"]);
 			
 			// set the data's min/ max vaues
 			setMinMaxValues();
