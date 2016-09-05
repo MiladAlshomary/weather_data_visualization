@@ -2,22 +2,59 @@ var overlay;
 
 var xx = 100;
 var yy = 100;
-var triangles = [
-	{p1: {x: 464, y: 134, val: 19.3, lat: 53.633186, lng: 9.988085}, p2: {x: 432, y: 138, lat:53.53316, lng:8.576083 ,val:19.4}, p3: {x: 435, y: 125, lat: 53.871254, lng: 8.705821 ,val: 18.6}}
-];
+// var triangles = [
+// 	{p1: {x: 464, y: 134, val: 19.3, lat: 53.633186, lng: 9.988085}, p2: {x: 432, y: 138, lat:53.53316, lng:8.576083 ,val:19.4}, p3: {x: 435, y: 125, lat: 53.871254, lng: 8.705821 ,val: 18.6}}
+// ];
 
 USGSOverlay.prototype = new google.maps.OverlayView();
 
 function drawTriangulation() {
-	for (var i = triangles.length - 1; i >= 0; i--) {
-		t = triangles[i];
-		t = new Triangle(
-				new Point(464, 134, {air_temperature: 19.3, Latitude: 53.633186, Longitude: 9.988085}),
-				new Point(432, 138, {air_temperature: 14, Latitude: 53.53316, Longitude: 8.576083}),
-				new Point(435, 125, {air_temperature: 23.8, Latitude: 53.871254, Longitude: 8.705821})
-	  );
+	for (var i = $triangles.length - 1; i >= 0; i--) {
+		t = $triangles[i];
+		// t = new Triangle(
+		// 		new Point(464, 134, {air_temperature: 19.3, Latitude: 53.633186, Longitude: 9.988085}),
+		// 		new Point(432, 138, {air_temperature: 14, Latitude: 53.53316, Longitude: 8.576083}),
+		// 		new Point(435, 125, {air_temperature: 23.8, Latitude: 53.871254, Longitude: 8.705821})
+	 //  );
 		addOverlay(t);
+
+		drawTriangleOnMap(t);
 	}
+}
+
+function drawTriangleOnMap(t) {
+	// new google.maps.Marker({
+ //          position: new google.maps.LatLng(t[0].attributes['Latitude'], t[0].attributes['Longitude']),
+ //          map: $map,
+ //          title: 'title'
+ //        });
+
+	// new google.maps.Marker({
+ //          position: new google.maps.LatLng(t[1].attributes['Latitude'], t[1].attributes['Longitude']),
+ //          map: $map,
+ //          title: 'title'
+ //        });
+
+	// new google.maps.Marker({
+ //          position: new google.maps.LatLng(t[2].attributes['Latitude'], t[2].attributes['Longitude']),
+ //          map: $map,
+ //          title: 'title'
+ //        });
+
+    // Construct the polygon.
+    var tt = new google.maps.Polygon({
+      paths: [
+      	{lat: parseFloat(t[0].attributes['Latitude']), lng: parseFloat(t[0].attributes['Longitude'])},
+      	{lat: parseFloat(t[1].attributes['Latitude']), lng: parseFloat(t[1].attributes['Longitude'])},
+      	{lat: parseFloat(t[2].attributes['Latitude']), lng: parseFloat(t[2].attributes['Longitude'])}
+      ],
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.2,
+      strokeWeight: 2,
+    });
+
+    tt.setMap($map);
+
 }
 
 function addOverlay(triangle){
