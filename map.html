@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Showing/Hiding overlays</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7J1zsErb9_7jxNu5KU5kIENFObAQEbl0&libraries=visualization"></script>
+    <script src="./js/math.js"></script>
+    <script src="./js/graphics.js"></script>
+    <script src="./js/main.js"></script>
+  </head>
+  <body onload="drawTriangulation()">
+<!-- Add an input button to initiate the toggle method on the overlay. -->
+    <div id="floating-panel">
+      <input type="button" value="Toggle visibility" onclick="overlay.toggle();"></input>
+      <input type="button" value="Toggle DOM attachment" onclick="overlay.toggleDOM();"></input>
+    </div>
+    <div id="map"></div>
+  </body>
+</html>
