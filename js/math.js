@@ -136,15 +136,15 @@ Circle.prototype = {
     }
 }
 
-function Point(x, y) {
-    this.init(x, y);
+function Point(x, y, attrs) {
+    this.init(x, y, attrs);
 }
 
 Point.prototype = {
     init: function(x, y, attrs) {
-        this.x = x? x: 0;
-        this.y = y? y: 0;
-        this.attributes = attrs? attrs: {};
+        this.x = x ? x: 0;
+        this.y = y ? y: 0;
+        this.attributes = attrs ? attrs: {};
     },
     add: function(other) {
         return this._operationTemplate(other, function(a, b) {return a + b});
