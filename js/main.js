@@ -119,9 +119,9 @@ USGSOverlay.prototype.draw = function() {
 
 
 	var triangle = new Triangle(
-        [p1.x, p1.y],
-        [p2.x, p2.y],
-        [p3.x, p3.y]);
+        new Point(p1.x, p1.y),
+        new Point(p2.x, p2.y),
+        new Point(p3.x, p3.y));
 
     triangle[0].color = [1, 0, 0, 1]; // red
     triangle[1].color = [0, 1, 0, 1]; // green
@@ -134,6 +134,7 @@ USGSOverlay.prototype.draw = function() {
 	    var v1 = triangle.edges[i][0];
 	    var v2 = triangle.edges[i][1];
 	    var v3 = triangle[i];
+	    
 	    var isect = intersectLines(v1, v2, v3, point);
 	    if (isect) {
 	        var pointVertexDist = distance(point, v3);

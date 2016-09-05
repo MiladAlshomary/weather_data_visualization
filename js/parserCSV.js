@@ -18,6 +18,7 @@ $(window).load(function(){
 			console.log("Fetched data file...");
 			parseData(contents);
 			console.log("Parsed data file...");
+			triangluate($finalData["2016-07-23T00:00:00Z"]);
 		};
 	});
 	
@@ -25,12 +26,9 @@ $(window).load(function(){
 		$("#data-upload").removeAttr("disabled");
 	});
 	
-	// Get data
 	function parseData(content){
 			if ( content == "" ) return false;
-			
-			var lines = content.split('\n');      
-			
+			var lines = content.split('\n');      			
 			// Columns
 			var columnsLine = lines[0];
 			var columns = columnsLine.split(";");

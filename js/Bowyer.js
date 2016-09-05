@@ -19,9 +19,44 @@ function triangluate(points) {
 				badTriangles.push(t);
 			}
 		}
+
+		var polygon = new HashSet();
+		var toRemove = new HashSet();
+		for (var i = badTriangles.length - 1; i >= 0; i--) {
+			var badT = badTriangles[i];
+			var badEdges = badT.getEdges();
+			for(var i = 2; i >= 0; i--) {
+				var edge = badEdges[i];
+				if(polygon.contains(edge)){
+					toRemove.add(edge);
+				} else {
+					polygon.add(edge);
+				}
+			}
+		}
+
+		for (var i = 0; i < toRemove.length; i++) {
+			polygon.remove(toRemove[i]);
+		}
+
+		for (var i = polygon.length - 1; i >= 0; i--) {
+			var p = polygon[i];
+			var triangle = new Triangle(p.p1, p.p2, point);
+		}
 	}
 
-	
+	var result = [];
+	for (var i = triangles.length - 1; i >= 0; i--) {
+		var t = triangles[i]
+		if(t.containsPoint(superTri[0]) || t.containsPoint(superTri[1]) || t.containsPoint(superTri[2])) {
+			//nothing
+		} else {
+			result.push(t);
+		}
+	}
+
+	return triangles;
+
 }
 
 function getXYBoundingBox(points) {
@@ -62,8 +97,8 @@ function getLatLngBoundingBox(points) {
 function getSuperTriangle(leftUpPoint, leftDownPoint, rightDownPoint, rightUpPoint) {
 	leftUpPoint.x -= 10;
 	leftUpPoint.y -= 10;
-	leftDownPoint.x += 10;
-	leftDownPoint.y - = 10;
+	leftDownPoint.x -= 10;
+	leftDownPoint.y += 10;
 
 	var E = rightUpPoint.sub(leftUpPoint);
 	var F = rightDownPoint.sub(leftDownPoint);

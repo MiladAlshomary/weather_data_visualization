@@ -44,15 +44,37 @@ function distance(a, b) {
     return a.sub(b).toDist();
 }
 
+function Edge(p1, p2) {
+    this.init(p1, p2);
+    
+}
+
+Edge.prototype = {
+    init: function(p1, p2) {
+        this.p1 = p1;
+        this.p2 = p2;
+    },
+
+    hashCode: function() {
+        int hash = this.p1.hashCode() + this.p2.hashCode();
+        return hash;
+    },
+
+    equal: function (edge) {
+        return (this.p1 == edge.p1 && this.p2 == edge.p2) || (this.p1 == edge.p1 && this.p2 == edge.p2)   
+    }
+}
+
 function Triangle(p1, p2, p3) {
     this.init(p1, p2, p3);
 }
+
 Triangle.prototype = {
     init: function(p1, p2, p3) {
         // vertex access
-        this[0] = new Point(p1[0], p1[1]);
-        this[1] = new Point(p2[0], p2[1]);
-        this[2] = new Point(p3[0], p3[1]);
+        this[0] = p1;//new Point(p1[0], p1[1]);
+        this[1] = p2;//new Point(p2[0], p2[1]);
+        this[2] = p3//new Point(p3[0], p3[1]);
 
         // edge access
         this.edges = [
@@ -63,6 +85,14 @@ Triangle.prototype = {
 
         this.center = this.getCenter();
         this.radius = this.getRadius();
+    },
+
+    getEdges: function() {
+        var result = [];
+        result[0]  = new Edge(this.edges[0][0], this.edges[0][1]);
+        result[1]  = new Edge(this.edges[1][0], this.edges[1][1]);
+        result[2]  = new Edge(this.edges[2][0], this.edges[2][1]);
+        return result;
     },
 
     getCenter: function() {
@@ -93,6 +123,24 @@ Triangle.prototype = {
         } else {
             return false;
         }
+    },
+
+    containsPoint: function(p) {
+        var v0 = this[2].sub(this[0]);
+        var v1 = this[1].sub(this[0]);
+        var v2 = p.sub(this[0]);
+        
+        var dot00 = dot(v0, v0);
+        var dot01 = dot(v0, v1);
+        var dot02 = dot(v0, v2);
+        var dot11 = dot(v1, v1);
+        var dot12 = dot(v1, v2);
+        
+        var invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+        
+        return (u >= 0) && (v >= 0) && (u + v <= 1);
     }
 }
 
