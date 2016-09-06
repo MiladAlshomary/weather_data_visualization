@@ -10,15 +10,18 @@ USGSOverlay.prototype = new google.maps.OverlayView();
 
 function drawTriangulation() {
 	for (var i = $triangles.length - 1; i >= 0; i--) {
-		t = $triangles[i];
+		
+		// if ( i < $triangles.length - 1) break;
+		
+		var currentTriangle = $triangles[i];
 		// t = new Triangle(
 		// 		new Point(464, 134, {air_temperature: 19.3, Latitude: 53.633186, Longitude: 9.988085}),
 		// 		new Point(432, 138, {air_temperature: 14, Latitude: 53.53316, Longitude: 8.576083}),
 		// 		new Point(435, 125, {air_temperature: 23.8, Latitude: 53.871254, Longitude: 8.705821})
 	 //  );
-		addOverlay(t);
 
-		drawTriangleOnMap(t);
+		drawTriangleOnMap(currentTriangle);
+		addOverlay(currentTriangle);
 	}
 }
 
@@ -42,7 +45,7 @@ function drawTriangleOnMap(t) {
  //        });
 
     // Construct the polygon.
-    var tt = new google.maps.Polygon({
+    var polygon = new google.maps.Polygon({
       paths: [
       	{lat: parseFloat(t[0].attributes['Latitude']), lng: parseFloat(t[0].attributes['Longitude'])},
       	{lat: parseFloat(t[1].attributes['Latitude']), lng: parseFloat(t[1].attributes['Longitude'])},
@@ -53,13 +56,12 @@ function drawTriangleOnMap(t) {
       strokeWeight: 2,
     });
 
-    tt.setMap($map);
+    polygon.setMap($map);
 
 }
 
 function addOverlay(triangle){
-	// The photograph is courtesy of the U.S. Geological Survey.
-	window.overlay = new USGSOverlay(triangle, window.map);
+	new USGSOverlay(triangle, window.map);
 }
 
 function addMarker(lat, lng, name) {
@@ -76,31 +78,6 @@ function addMarkerByXY(x, y) {
 	addMarker(latlng.lat(), latlng.lng(), name)
 }
 
-function loadHeatMapPoints(json) {
-	var jsonObj = JSON.parse(json);
-	var points = [];
-	for (var key in jsonObj) {
-	  if (jsonObj.hasOwnProperty(key)) {
-		point = jsonObj[key];
-		latlng = window.map.getProjection().fromPointToLatLng(new google.maps.Point(point.x, point.y));
-		points.push({location: latlng, weight: point.value});
-	  }
-	}
-
-	heatmap = new google.maps.visualization.HeatmapLayer({
-          data: points,
-          map: window.map,
-	  dissipating : false
-        });
-
-var gradient = [
-	  'rgba(0, 0, 0, 0)','rgba(25, 0, 0, 1)', 'rgba(50, 0, 0, 1)', 'rgba(75, 0, 0, 1)', 'rgba(100, 0, 0, 1)', 'rgba(125, 0, 0, 1)' ,'rgba(200, 0, 0, 1)', 'rgba(255, 0, 0, 1)'
-	]
-	heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
-	heatmap.set('radius', 20);
-
-}
-
 /** @constructor */
 function USGSOverlay(triangle, map) {
 	// Now initialize all properties.
@@ -115,26 +92,6 @@ function USGSOverlay(triangle, map) {
 	this.setMap(map);
 }
 
-/**
-* onAdd is called when the map's panes are ready and the overlay has been
-* added to the map.
-*/
-USGSOverlay.prototype.onAdd = function() {
-	
-	// Create the img element and attach it to the div.
-	var canvas = document.createElement('canvas');
-	canvas.style.border = 'none';
-	canvas.style.borderWidth = '0px';
-	canvas.style.position = 'absolute';
-	canvas.className = "fuckme";    
-
-	this.canvas_ = canvas;
-
-	// Add the element to the "overlayImage" pane.
-	var panes = this.getPanes();
-	panes.overlayImage.appendChild(this.canvas_);
-};
-
 function getTriangleArea(aa, bb, cc){
 	var ab = bb.sub(aa);
 	var ac = cc.sub(aa);
@@ -142,15 +99,34 @@ function getTriangleArea(aa, bb, cc){
 	return cross(ab, ac) / 2;
 }
 
-USGSOverlay.prototype.draw = function() {
-	var canvas = this.canvas_;
+/**
+* onAdd is called when the map's panes are ready and the overlay has been
+* added to the map.
+*/
+USGSOverlay.prototype.onAdd = function() {
+	console.log("on add");
+	
+	// Create the img element and attach it to the div.
+	var canvas = document.createElement('canvas');
+	canvas.style.border = 'none';
+	canvas.style.borderWidth = '0px';
+	canvas.style.position = 'absolute';
+	canvas.className = "milad-patrick";    
+
+	this.canvas_ = canvas;
+
+	// Add the element to the "overlayImage" pane.
+	var panes = this.getPanes();
+	panes.overlayImage.appendChild(this.canvas_);
+	
+		var canvas = this.canvas_;
 	// We use the south-west and north-east
 	// coordinates of the overlay to peg it to the correct position and size.
 	// To do this, we need to retrieve the projection from the overlay.
 	var overlayProjection = this.getProjection();
-	var p1 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t[0].attributes.Latitude, t[0].attributes.Longitude));
-	var p2 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t[1].attributes.Latitude, t[1].attributes.Longitude));
-	var p3 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(t[2].attributes.Latitude, t[2].attributes.Longitude));
+	var p1 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(this.triangle[0].attributes.Latitude, this.triangle[0].attributes.Longitude));
+	var p2 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(this.triangle[1].attributes.Latitude, this.triangle[1].attributes.Longitude));
+	var p3 = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(this.triangle[2].attributes.Latitude, this.triangle[2].attributes.Longitude));
 
 	var result = getBounds([p1, p2, p3]);
 
@@ -159,34 +135,34 @@ USGSOverlay.prototype.draw = function() {
 	canvas.style.top  = result.minY + 'px';
 	canvas.style.width = (result.maxX - result.minX) + 'px';
 	canvas.style.height = (result.maxY - result.minY) + 'px';
-	canvas.style.opacity = 0.9;
-
+	canvas.style.opacity =  1;
+	
 	var pp1 = convertPosition(p1, result, canvas.width, canvas.height);
 	var pp2 = convertPosition(p2, result, canvas.width, canvas.height);
 	var pp3 = convertPosition(p3, result, canvas.width, canvas.height);
 	
-	t[0].x = pp1.x;
-	t[0].y = pp1.y;
-	t[1].x = pp2.x;
-	t[1].x = pp2.y;
-	t[2].x = pp3.x;
-	t[2].x = pp3.y;
+	this.triangle[0].x = pp1.x;
+	this.triangle[0].y = pp1.y;
+	this.triangle[1].x = pp2.x;
+	this.triangle[1].y = pp2.y;
+	this.triangle[2].x = pp3.x;
+	this.triangle[2].y = pp3.y;
+	
+	var triangleHere = this.triangle;
 	
 	var triangleGradient = function(point){
 		
 		
-		if ( !t.containsPoint(point) ){
+		if (!triangleHere.containsPoint(point) ){
 			return [0, 0, 0, 0];
 		}
 		
 		else{
-			// find u, v and w
-			// u = CAP_Area / ABC_Area
-			// v = ABP_Area / ABC_Area
+			//return [0.65, 0, 0,1];
 			
-			var a = t[0];
-			var b = t[1];
-			var c = t[2];
+			var a = triangleHere[0];
+			var b = triangleHere[1];
+			var c = triangleHere[2];
 			
 			// Get area of ABC triangle (the triangle we are currently in in the loop!)
 			var ABC_Area = getTriangleArea(a, b, c);
@@ -198,22 +174,41 @@ USGSOverlay.prototype.draw = function() {
 			var u = CAP_Area / ABC_Area;
 			var v = ABP_Area / ABC_Area;
 
-			var pVal = u * a.attributes.air_temperature + v * b.attributes.air_temperature + (1-u-v) * c.attributes.air_temperature;
+			var pVal = u * parseFloat(a.attributes.air_temperature) + v * parseFloat(b.attributes.air_temperature) + (1-u-v) * parseFloat(c.attributes.air_temperature);
+			// var pVal = (parseFloat(a.attributes.air_temperature) + parseFloat(b.attributes.air_temperature) + parseFloat(c.attributes.air_temperature) ) / 3;
 
 				// Normalization
 			var normalizedAttributeVal = ( (pVal - $finalDataMinVal) / ($finalDataMaxVal - $finalDataMinVal) );
-			var aR = 0;   var aG = 0; var aB=255;  // blue
-			var bR = 255; var bG = 0; var bB=0;    // red
+			
+			// Heuristic threshholding
+			
+			if ( normalizedAttributeVal >= 0.8 ){
+				normalizedAttributeVal = Math.pow(normalizedAttributeVal, 2);
+			}
+			else{
+				normalizedAttributeVal = Math.sqrt(normalizedAttributeVal);
+			}
+			
+			if ( normalizedAttributeVal > 1 ) normalizedAttributeVal = 1;
+			if ( normalizedAttributeVal < 0 ) normalizedAttributeVal = 0;
+			
+			var aR = 0;   var aG = 0; var aB=1;  // blue
+			var bR = 1; var bG = 0; var bB=0;    // red
 
 			var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
 			var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
 			var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
 
-			return [red, green, blue, 255];
+			return [red, green, blue, 1];
 		}
 	}
 	
 	process(this.canvas_, triangleGradient);
+};
+
+USGSOverlay.prototype.draw = function() {
+	console.log("on draw");
+
 };
 
 USGSOverlay.prototype.onRemove = function() {

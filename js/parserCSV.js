@@ -29,10 +29,16 @@ $(window).load(function(){
 			parseData(contents);
 			console.log("Parsed data file...");
 			
-			$triangles = triangluate($finalData["2016-07-24T23:00:00Z"]);
-			
 			// set the data's min/ max vaues
 			setMinMaxValues();
+			
+			// calculate the triangles
+			triangluate($finalData["2016-07-24T23:00:00Z"], function(callback){
+				$triangles = callback;
+				
+				// when done, draw them
+				drawTriangulation();
+			});
 		};
 	});
 	

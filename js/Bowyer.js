@@ -1,6 +1,6 @@
 //bowyer to implement dlnay trianglulation
 
-function triangluate(points) {
+function triangluate(points, callback) {
 	var triangles = [];
 	var bounds = getXYBoundingBox(points);
 	var leftUpPoint = new Point(bounds.minX, bounds.minY);
@@ -63,9 +63,10 @@ function triangluate(points) {
 			result.push(t);
 		}
 	}
-
-	return result;
-
+	
+	if (callback && typeof(callback) === "function") {
+		callback(result);
+	}
 }
 
 function getXYBoundingBox(points) {
