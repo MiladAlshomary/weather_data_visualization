@@ -1,6 +1,6 @@
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 7,
+		zoom: 6,
 		center: {lat: 50.7596754, lng: 10.2076453},
 		mapTypeId: 'roadmap',
 		scrollwheel:  false
