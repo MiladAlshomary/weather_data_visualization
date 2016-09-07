@@ -14,35 +14,31 @@ function drawTriangulation() {
 		// if ( i < $triangles.length - 1) break;
 		
 		var currentTriangle = $triangles[i];
-		// t = new Triangle(
-		// 		new Point(464, 134, {air_temperature: 19.3, Latitude: 53.633186, Longitude: 9.988085}),
-		// 		new Point(432, 138, {air_temperature: 14, Latitude: 53.53316, Longitude: 8.576083}),
-		// 		new Point(435, 125, {air_temperature: 23.8, Latitude: 53.871254, Longitude: 8.705821})
-	 //  );
-
 		drawTriangleOnMap(currentTriangle);
 		addOverlay(currentTriangle);
 	}
 }
 
+function drawPointMarker(point) {
+	point.marker = new google.maps.Marker({
+          position: new google.maps.LatLng(point.attributes['Latitude'], point.attributes['Longitude']),
+          map: $map,
+          title: point.attributes['Stationname']
+        });
+
+	var infowindow = new google.maps.InfoWindow({
+      content: point.attributes['Stationname'] + ' : ' + point.attributes['air_temperature']
+    });
+
+	point.marker.addListener('click', function() {
+      infowindow.open(map, point.marker);
+    });
+}
+
 function drawTriangleOnMap(t) {
-	// new google.maps.Marker({
- //          position: new google.maps.LatLng(t[0].attributes['Latitude'], t[0].attributes['Longitude']),
- //          map: $map,
- //          title: 'title'
- //        });
-
-	// new google.maps.Marker({
- //          position: new google.maps.LatLng(t[1].attributes['Latitude'], t[1].attributes['Longitude']),
- //          map: $map,
- //          title: 'title'
- //        });
-
-	// new google.maps.Marker({
- //          position: new google.maps.LatLng(t[2].attributes['Latitude'], t[2].attributes['Longitude']),
- //          map: $map,
- //          title: 'title'
- //        });
+	drawPointMarker(t[0]);
+	drawPointMarker(t[1]);
+	drawPointMarker(t[2]);
 
     // Construct the polygon.
     var polygon = new google.maps.Polygon({
@@ -149,6 +145,12 @@ USGSOverlay.prototype.onAdd = function() {
 	this.triangle[2].y = pp3.y;
 	
 	var triangleHere = this.triangle;
+	colors = [{from:[1,0,0], to:[0,0,1]},{from:[1,1,1], to:[0,0,0]},{from:[0,0,1], to:[0,1,1]},{from:[1,1,1], to:[0,0,0]}];
+	
+	//random
+	var r = 0;//Math.floor((Math.random() * 4) + 0);
+	var aR = colors[r].from[0];   var aG = colors[r].from[1]; var aB=colors[r].from[2];
+	var bR = colors[r].to[0]; var bG = colors[r].to[1]; var bB=colors[r].to[2];
 	
 	var triangleGradient = function(point){
 		
@@ -158,7 +160,12 @@ USGSOverlay.prototype.onAdd = function() {
 		}
 		
 		else{
-			//return [0.65, 0, 0,1];
+
+			
+
+			//var aR = 0;   var aG = 0; var aB=1;  // blue
+			//var bR = 1; var bG = 0; var bB=0;    // red
+
 			
 			var a = triangleHere[0];
 			var b = triangleHere[1];
@@ -174,10 +181,10 @@ USGSOverlay.prototype.onAdd = function() {
 			var u = CAP_Area / ABC_Area;
 			var v = ABP_Area / ABC_Area;
 
-			var pVal = u * parseFloat(a.attributes.air_temperature) + v * parseFloat(b.attributes.air_temperature) + (1-u-v) * parseFloat(c.attributes.air_temperature);
+			var pVal = u * parseFloat(b.attributes.air_temperature) + v * parseFloat(c.attributes.air_temperature) + (1-u-v) * parseFloat(a.attributes.air_temperature);
 			// var pVal = (parseFloat(a.attributes.air_temperature) + parseFloat(b.attributes.air_temperature) + parseFloat(c.attributes.air_temperature) ) / 3;
 
-				// Normalization
+			// Normalization
 			var normalizedAttributeVal = ( (pVal - $finalDataMinVal) / ($finalDataMaxVal - $finalDataMinVal) );
 			
 			// Heuristic threshholding
@@ -192,8 +199,7 @@ USGSOverlay.prototype.onAdd = function() {
 			if ( normalizedAttributeVal > 1 ) normalizedAttributeVal = 1;
 			if ( normalizedAttributeVal < 0 ) normalizedAttributeVal = 0;
 			
-			var aR = 0;   var aG = 0; var aB=1;  // blue
-			var bR = 1; var bG = 0; var bB=0;    // red
+			
 
 			var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
 			var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
