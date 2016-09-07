@@ -27,7 +27,6 @@ function triangluate(points, callback) {
 			var badEdges = badT.getEdges();
 			for(var c = 2; c >= 0; c--) {
 				var edge = badEdges[c];
-				//console.log(edge);
 				if(edge.hashCode() in polygon){
 					toRemove[edge.hashCode()] = edge;
 				} else {

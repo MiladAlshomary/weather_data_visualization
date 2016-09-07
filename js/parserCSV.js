@@ -1,8 +1,13 @@
-function setMinMaxValues(){
-	$.each($finalData[$dataTimestamp], function(i, point){
+function setMinMaxValues(timestamp){
+	$finalDataMinVal = 150;
+	$finalDataMaxVal = -150;
+	
+	$.each($finalData[timestamp], function(i, point){
 		var temperature = point.attributes.air_temperature;
-		$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
-		$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
+		if ( temperature != "" ){
+			$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
+			$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
+		}
 	});
 
 	$("#max-value span").html($finalDataMaxVal);
@@ -36,7 +41,6 @@ function parseData(content){
 			if ($finalData[pointData.Date] === undefined ){
 				$finalData[pointData.Date] = [];
 				
-				console.log(pointData.Date);
 				var dateParsed = Date.parse(pointData.Date.slice(0,-1));
 				dateParsedText = dateParsed.toString('dddd dd, HH:mm');
 				
@@ -51,7 +55,7 @@ function parseData(content){
 			var pXY = getXY(pointData.Latitude, pointData.Longitude);
 			$finalData[pointData.Date][prevSize] = new Point(pXY.x, pXY.y, pointData);
 		}
-
+		
 		counter++;
 	});
 	

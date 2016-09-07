@@ -4,8 +4,7 @@ function drawTriangulation() {
 	var progress = 0;
 	
 	for (i = 0; i < $trianglesTotal; i++){
-		
-		//drawTriangleOnMap($triangles[i]);
+		drawTriangleOnMap($triangles[i]);
 		addOverlay($triangles[i]);
 	}
 }
@@ -24,7 +23,6 @@ function drawPointMarker(point) {
 	point.marker.addListener('click', function() {
 		infowindow.open(map, point.marker);
 	});
-	
 	$allMapMarkers.push(point.marker);
 }
 
@@ -33,7 +31,7 @@ function deleteMarkers() {
 	for (var i = 0; i < $allMapMarkers.length; i++) {
 		$allMapMarkers[i].setMap(null);
 	}
-	$allMapMarkers = [];;
+	$allMapMarkers = [];
 }
 	
 function deletePolygons() {
