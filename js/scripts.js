@@ -11,6 +11,11 @@ $(window).load(function(){
 	}
 	
 	function triangulateOnTimestamp(timestamp){
+		// set the data's min/ max vaues
+		setMinMaxValues(timestamp);
+		
+		$("#main").css('opacity', 1);
+		
 		// Cleanup previous interpolation
 		cleanupPrevExperiment();
 		
@@ -35,11 +40,6 @@ $(window).load(function(){
 		reader.onload = function(e) {
 			var contents = e.target.result;
 			parseData(contents);
-			
-			// set the data's min/ max vaues
-			setMinMaxValues();
-			
-			$("#main").css('opacity', 1);
 			
 			// Start triangulation
 			triangulateOnTimestamp($dataTimestamp);

@@ -23,7 +23,6 @@ function drawPointMarker(point) {
 	point.marker.addListener('click', function() {
 		infowindow.open(map, point.marker);
 	});
-	
 	$allMapMarkers.push(point.marker);
 }
 
@@ -32,7 +31,7 @@ function deleteMarkers() {
 	for (var i = 0; i < $allMapMarkers.length; i++) {
 		$allMapMarkers[i].setMap(null);
 	}
-	$allMapMarkers = [];;
+	$allMapMarkers = [];
 }
 	
 function deletePolygons() {
