@@ -4,9 +4,8 @@ function drawTriangulation() {
 	var progress = 0;
 	
 	for (i = 0; i < $trianglesTotal; i++){
-		// if ( i < $triangles.length - 1) break;
 		
-		drawTriangleOnMap($triangles[i]);
+		//drawTriangleOnMap($triangles[i]);
 		addOverlay($triangles[i]);
 	}
 }

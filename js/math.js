@@ -146,7 +146,8 @@ Triangle.prototype = {
         var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
         var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
         
-        return (u >= 0) && (v >= 0) && (u + v <= 1);
+        return (u >= -0.006) && (v >= -0.006) && (u + v <= 1.005);
+        //return (u >= 0) && (v >= 0) && (u + v <= 1);
     }
 }
 
@@ -201,10 +202,12 @@ Point.prototype = {
         this.attributes = attrs ? attrs: {};
     },
     add: function(other) {
-        return this._operationTemplate(other, function(a, b) {return a + b});
+        return new Point(this.x + other.x, this.y + other.y);
+        //return this._operationTemplate(other, function(a, b) {return a + b});
     },
     sub: function(other) {
-        return this._operationTemplate(other, function(a, b) {return a - b});
+        return new Point(this.x - other.x, this.y - other.y);
+        //return this._operationTemplate(other, function(a, b) {return a - b});
     },
     mul: function(other) {
         return this._operationTemplate(other, function(a, b) {return a * b});
