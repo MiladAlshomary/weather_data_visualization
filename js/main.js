@@ -3,8 +3,6 @@ USGSOverlay.prototype = new google.maps.OverlayView();
 function drawTriangulation() {
 	var progress = 0;
 	
-	$("#loading").show();
-	
 	for (i = 0; i < $trianglesTotal; i++){
 		// if ( i < $triangles.length - 1) break;
 		
@@ -15,18 +13,35 @@ function drawTriangulation() {
 
 function drawPointMarker(point) {
 	point.marker = new google.maps.Marker({
-          position: new google.maps.LatLng(point.attributes['Latitude'], point.attributes['Longitude']),
-          map: $map,
-          title: point.attributes['Stationname']
-        });
+		position: new google.maps.LatLng(point.attributes['Latitude'], point.attributes['Longitude']),
+		map: $map,
+		title: point.attributes['Stationname']
+	});
 
 	var infowindow = new google.maps.InfoWindow({
-      content: point.attributes['Stationname'] + ' : ' + point.attributes['air_temperature']
-    });
+		content: point.attributes['Stationname'] + ' : ' + point.attributes['air_temperature']
+	});
 
 	point.marker.addListener('click', function() {
-      infowindow.open(map, point.marker);
-    });
+		infowindow.open(map, point.marker);
+	});
+	
+	$allMapMarkers.push(point.marker);
+}
+
+// delete markers
+function deleteMarkers() {
+	for (var i = 0; i < $allMapMarkers.length; i++) {
+		$allMapMarkers[i].setMap(null);
+	}
+	$allMapMarkers = [];;
+}
+	
+function deletePolygons() {
+	for (var i = 0; i < $allMapPolygons.length; i++) {
+		$allMapPolygons[i].setMap(null);
+	}
+	$allMapPolygons = [];
 }
 
 function drawTriangleOnMap(t) {
@@ -34,20 +49,20 @@ function drawTriangleOnMap(t) {
 	drawPointMarker(t[1]);
 	drawPointMarker(t[2]);
 
-    // Construct the polygon.
-    var polygon = new google.maps.Polygon({
-      paths: [
-      	{lat: parseFloat(t[0].attributes['Latitude']), lng: parseFloat(t[0].attributes['Longitude'])},
-      	{lat: parseFloat(t[1].attributes['Latitude']), lng: parseFloat(t[1].attributes['Longitude'])},
-      	{lat: parseFloat(t[2].attributes['Latitude']), lng: parseFloat(t[2].attributes['Longitude'])}
-      ],
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.2,
-      strokeWeight: 2,
-    });
+	// Construct the polygon.
+	var polygon = new google.maps.Polygon({
+		paths: [
+			{lat: parseFloat(t[0].attributes['Latitude']), lng: parseFloat(t[0].attributes['Longitude'])},
+			{lat: parseFloat(t[1].attributes['Latitude']), lng: parseFloat(t[1].attributes['Longitude'])},
+			{lat: parseFloat(t[2].attributes['Latitude']), lng: parseFloat(t[2].attributes['Longitude'])}
+		],
+		strokeColor: '#FF0000',
+		strokeOpacity: 0.2,
+		strokeWeight: 2,
+	});
 
-    polygon.setMap($map);
-
+	polygon.setMap($map);
+	$allMapPolygons.push(polygon);
 }
 
 function addOverlay(triangle){

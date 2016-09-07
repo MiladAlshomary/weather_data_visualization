@@ -13,3 +13,6 @@ var $dataTimestamp = "2016-07-24T23:00:00Z";
 
 var $canvasClass = "canvas-w";
 var $canvasOpacity = 0.9;
+
+var $allMapMarkers = {};
+var $allMapPolygons = {};

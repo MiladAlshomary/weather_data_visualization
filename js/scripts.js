@@ -4,6 +4,25 @@ $(window).load(function(){
 		$("#data-upload").removeAttr("disabled");
 	});
 	
+	function cleanupPrevExperiment(){
+		$("." + $canvasClass).remove();
+		deleteMarkers();
+		deletePolygons();
+	}
+	
+	function triangulateOnTimestamp(timestamp){
+		// Cleanup previous interpolation
+		cleanupPrevExperiment();
+		
+		triangluate($finalData[timestamp], function(callback){
+			$triangles = callback;
+			$trianglesTotal = $triangles.length;
+			
+			// when done, draw them
+			drawTriangulation();
+		});
+	}
+	
 	// Browse and select a data file
 	$('#data-upload').on('change', function(ee){
 		var file = ee.target.files[0];
@@ -21,14 +40,9 @@ $(window).load(function(){
 			setMinMaxValues();
 			
 			$("#main").css('opacity', 1);
-			// calculate the triangles
-			triangluate($finalData[$dataTimestamp], function(callback){
-				$triangles = callback;
-				$trianglesTotal = $triangles.length;
-				
-				// when done, draw them
-				drawTriangulation();
-			});
+			
+			// Start triangulation
+			triangulateOnTimestamp($dataTimestamp);
 		};
 	});
 	
@@ -44,6 +58,12 @@ $(window).load(function(){
 		// when sliding, update the value of the canvas opacity
 		$("#transparency .value").html(ui.value);
 		$("." + $canvasClass).css('opacity', ui.value);
+	});
+	
+	// Timestamp select
+	$("#timestamp-select").on('change', function(){
+		var timestamp = $(this).find("option:selected" ).val();
+		triangulateOnTimestamp(timestamp);
 	});
 	
 });

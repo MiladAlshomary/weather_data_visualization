@@ -6,10 +6,18 @@ html, body {
 	font-size: 15px;
 	font-weight: normal;
 	color: #333;
+	background: #fbfbfb;
 }
 .container{
 	width: 980px;
 	margin: 0 auto;
+	background: #fff;
+	padding: 30px 20px;
+}
+fieldset{
+	margin: 0;
+	padding: 0;
+	border: none;
 }
 #loading{
 	display: none;
@@ -17,27 +25,32 @@ html, body {
 .clearfix:after,.clearfix:before{display:table;content:" "}.clearfix:after{clear:both}
 #top{
 	clear: both;
-	margin: 10px 0 20px;
+	margin: 0 0 40px 0;
 }
 #site-title{
 	float: left;
-	font-size: 15px;
+	font-size: 18px;
+	margin: 0;
 	color: #0000ff;
 }
 #site-title span{
 	color: #ff0000;
 }
 #site-authors{
+	margin: 0;
 	float: right;
 	color: #bbb;
 	font-size: 13px;
 	font-weight: normal;
 }
 #map {
-	height: 100%;
+	height: 700px;
+	margin-bottom: 100px;
 }
 label{
+	display: inline-block;
 	width: 150px;
+	margin-right: 0 !important;
 }
 #floating-panel {
 	display: none;
