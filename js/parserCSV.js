@@ -1,11 +1,12 @@
 function setMinMaxValues(){
 	$.each($finalData[$dataTimestamp], function(i, point){
-		var temperature = point.air_temperature;
-		if (parseInt(temperature)){
-			$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
-			$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
-		}
+		var temperature = point.attributes.air_temperature;
+		$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
+		$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
 	});
+
+	$("#max-value span").html($finalDataMaxVal);
+	$("#min-value span").html($finalDataMinVal);
 }
 
 function parseData(content){
