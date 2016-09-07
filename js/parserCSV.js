@@ -35,6 +35,8 @@ function parseData(content){
 		
 	var counter = 0;
 	var prevSize = 0;
+	
+	$("#timestamp-select option").remove();
 	$.each ($rawData, function(k, pointData){
 		if(pointData.Date !== undefined) {
 			// initialize array for specific time if not found
@@ -45,7 +47,8 @@ function parseData(content){
 				dateParsedText = dateParsed.toString('dddd dd, HH:mm');
 				
 				// add the timestamp to the HTML timestamp selector
-				$("#timestamp-select").append("<option value='" + pointData.Date + "'>" + dateParsedText + "</option>");
+				var selected = ( pointData.Date == $dataTimestamp ) ? "selected" : "";
+				$("#timestamp-select").append("<option " + selected + " value='" + pointData.Date + "'>" + dateParsedText + "</option>");
 			}
 			
 			prevSize = $finalData[pointData.Date].length;

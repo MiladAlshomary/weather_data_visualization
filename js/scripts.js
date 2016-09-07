@@ -19,6 +19,7 @@ $(window).load(function(){
 		// Cleanup previous interpolation
 		cleanupPrevExperiment();
 		
+		// console.log(timestamp);
 		triangluate($finalData[timestamp], function(callback){
 			$triangles = callback;
 			$trianglesTotal = $triangles.length;

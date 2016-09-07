@@ -139,14 +139,11 @@ USGSOverlay.prototype.onAdd = function() {
 	var pp2 = convertPosition(p2, result, canvas.width, canvas.height);
 	var pp3 = convertPosition(p3, result, canvas.width, canvas.height);
 	
-	this.triangle[0].x = pp1.x;
-	this.triangle[0].y = pp1.y;
-	this.triangle[1].x = pp2.x;
-	this.triangle[1].y = pp2.y;
-	this.triangle[2].x = pp3.x;
-	this.triangle[2].y = pp3.y;
+	var ppp1 = new Point(pp1.x, pp1.y, this.triangle[0].attributes);
+	var ppp2 = new Point(pp2.x, pp2.y, this.triangle[1].attributes);
+	var ppp3 = new Point(pp3.x, pp3.y, this.triangle[2].attributes);
+	var triangleHere = new Triangle(ppp1, ppp2, ppp3);
 	
-	var triangleHere = this.triangle;
 	colors = [{from:[1,0,0], to:[0,0,1]},{from:[1,1,1], to:[0,0,0]},{from:[0,0,1], to:[0,1,1]},{from:[1,1,1], to:[0,0,0]}];
 	
 	//random
