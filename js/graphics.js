@@ -11,8 +11,8 @@ function process(canvas, func) {
 	var imageData = ctx.createImageData(canvas.width,
 			canvas.height);
 
-	for (var y = 0; y < canvas.height; y++) {
-		for (var x = 0; x < canvas.width; x++) {
+	for (var y = 0; y <= canvas.height; y++) {
+		for (var x = 0; x <= canvas.width; x++) {
 			var result = func(new Point(x, y));
 
 			setPixel(imageData, x, y, result);
