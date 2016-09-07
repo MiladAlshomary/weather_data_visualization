@@ -4,8 +4,7 @@ function drawTriangulation() {
 	var progress = 0;
 	
 	for (i = 0; i < $trianglesTotal; i++){
-		
-		//drawTriangleOnMap($triangles[i]);
+		drawTriangleOnMap($triangles[i]);
 		addOverlay($triangles[i]);
 	}
 }
@@ -188,15 +187,15 @@ USGSOverlay.prototype.onAdd = function() {
 			
 			// Heuristic threshholding
 			
-			if ( normalizedAttributeVal >= 0.8 ){
-				normalizedAttributeVal = Math.pow(normalizedAttributeVal, 2);
-			}
-			else{
-				normalizedAttributeVal = Math.sqrt(normalizedAttributeVal);
-			}
+			// if ( normalizedAttributeVal >= 0.8 ){
+			// 	normalizedAttributeVal = Math.pow(normalizedAttributeVal, 2);
+			// }
+			// else{
+			// 	normalizedAttributeVal = Math.sqrt(normalizedAttributeVal);
+			// }
 			
-			if ( normalizedAttributeVal > 1 ) normalizedAttributeVal = 1;
-			if ( normalizedAttributeVal < 0 ) normalizedAttributeVal = 0;
+			// if ( normalizedAttributeVal > 1 ) normalizedAttributeVal = 1;
+			// if ( normalizedAttributeVal < 0 ) normalizedAttributeVal = 0;
 
 			var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
 			var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
