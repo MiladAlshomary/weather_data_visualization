@@ -8,6 +8,9 @@ function lerp(a, b, fac) {
     return ret;
 }
 
+function getXY(lat, lng){
+	return $map.getProjection().fromLatLngToPoint(new google.maps.LatLng(lat, lng));
+}
 function intersectLines(a, b, c, d) {
     // http://www.ahristov.com/tutorial/geometry-games/intersection-lines.html
     var denum = (a.x - b.x) * (c.y - d.y) - (a.y - b.y) * (c.x - d.x);

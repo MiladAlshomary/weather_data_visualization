@@ -8,7 +8,6 @@ function initMap() {
 	map.setOptions({zoomControl: false, scrollwheel: false, disableDoubleClickZoom: true});
 	window.map = map;
 	$map = map;
-	//addOverlay(new google.maps.LatLng(62.281819, -150.287132), new google.maps.LatLng(62.400471, -150.005608), './images/heatmap.png')
 }
 
 $(window).load(function(){

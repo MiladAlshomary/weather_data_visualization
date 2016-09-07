@@ -1,0 +1,81 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+	font-size: 15px;
+	font-weight: normal;
+	color: #333;
+}
+.container{
+	width: 980px;
+	margin: 0 auto;
+}
+#loading{
+	display: none;
+}
+.clearfix:after,.clearfix:before{display:table;content:" "}.clearfix:after{clear:both}
+#top{
+	clear: both;
+	margin: 10px 0 20px;
+}
+#site-title{
+	float: left;
+	font-size: 15px;
+	color: #0000ff;
+}
+#site-title span{
+	color: #ff0000;
+}
+#site-authors{
+	float: right;
+	color: #bbb;
+	font-size: 13px;
+	font-weight: normal;
+}
+#map {
+	height: 100%;
+}
+label{
+	width: 150px;
+}
+#floating-panel {
+	display: none;
+	position: absolute;
+	top: 10px;
+	left: 25%;
+	z-index: 5;
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #999;
+	text-align: center;
+	font-family: 'Roboto','sans-serif';
+	line-height: 30px;
+	padding-left: 10px;
+}
+#data-select, #transparency{
+	display: block;
+	margin: 20px 0;
+}
+#data-select *, #transparency *{
+	display: inline-block;
+	vertical-align: top;
+	margin: 0;
+	margin-right: 10px;
+}
+#data-select #data-upload{
+	vertical-align: middle;
+}
+
+#main{
+	opacity: 0;
+}
+#transparency span{
+	margin-right: 10px;
+}
+#transparency .slider{
+	width: 125px;
+	margin-right: 25px;
+}
+#transparency .value{
+}

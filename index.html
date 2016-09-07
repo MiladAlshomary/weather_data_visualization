@@ -3,51 +3,59 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Showing/Hiding overlays</title>
-    <style>
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        height: 100%;
-      }
-      #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
-    </style>
+    <title>Weather Visualization 2016 | Patrick Saad, Milad Alshomary</title>
+		
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="css/main.css">
+		
 		<script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/hashtable.js"></script>
     <script src="js/lib/hashset.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7J1zsErb9_7jxNu5KU5kIENFObAQEbl0&libraries=visualization"></script>
 		<script src="js/globals.js"></script>
 		<script src="js/initMap.js"></script>
+		
     <script src="js/math.js"></script>
 		<script src="js/parserCSV.js"></script>
     <script src="js/graphics.js"></script>
     <script src="js/Bowyer.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/scripts.js"></script>
   </head>
   <body>
+	
+		<div class="container">
+		
+			<div id="top" class="clearfix">
+				<h1 id="site-title">Weather <span>Visualization</span></h1>
+				<h3 id="site-authors">Patrick Saad, Milad Alshomary</h3>
+			</div>
+		
+			<div id="data-select">
+				<label>Select data file (.csv):</label>
+				<input disabled="disabled" type="file" id="data-upload" />
+			</div>
+			
+			<div id="main">
+				<div id="transparency">
+					<label>Transparency</label>
+					<div class="slider"></div>
+					<div class="value"></div>
+				</div>
+				
+				<div id="loading">Loading: <span></span></div>
 
-	<p>Select data file (.csv):</p>
-	<input disabled="disabled" type="file" id="data-upload" />
-
-    <div id="floating-panel">
-      <input type="button" value="Toggle visibility" onclick="overlay.toggle();"></input>
-      <input type="button" value="Toggle DOM attachment" onclick="overlay.toggleDOM();"></input>
-    </div>
-    <div id="map"></div>
+				<div id="floating-panel">
+					<input type="button" value="Toggle visibility" onclick="overlay.toggle();"></input>
+					<input type="button" value="Toggle DOM attachment" onclick="overlay.toggleDOM();"></input>
+				</div>
+				
+			</div>
+			
+		</div>
+				
+		<div id="map"></div>
+		
   </body>
 </html>

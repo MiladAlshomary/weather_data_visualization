@@ -1,21 +1,15 @@
-var overlay;
-
-var xx = 100;
-var yy = 100;
-// var triangles = [
-// 	{p1: {x: 464, y: 134, val: 19.3, lat: 53.633186, lng: 9.988085}, p2: {x: 432, y: 138, lat:53.53316, lng:8.576083 ,val:19.4}, p3: {x: 435, y: 125, lat: 53.871254, lng: 8.705821 ,val: 18.6}}
-// ];
-
 USGSOverlay.prototype = new google.maps.OverlayView();
 
 function drawTriangulation() {
-	for (var i = $triangles.length - 1; i >= 0; i--) {
-		
+	var progress = 0;
+	
+	$("#loading").show();
+	
+	for (i = 0; i < $trianglesTotal; i++){
 		// if ( i < $triangles.length - 1) break;
 		
-		var currentTriangle = $triangles[i];
-		drawTriangleOnMap(currentTriangle);
-		addOverlay(currentTriangle);
+		drawTriangleOnMap($triangles[i]);
+		addOverlay($triangles[i]);
 	}
 }
 
@@ -63,10 +57,10 @@ function addOverlay(triangle){
 function addMarker(lat, lng, name) {
 	var myLatLng = {lat: lat, lng: lng};
 	var marker = new google.maps.Marker({
-          position: myLatLng,
-          map: window.map,
-          title: name
-        });
+		position: myLatLng,
+		map: window.map,
+		title: name
+	});
 }
 
 function addMarkerByXY(x, y) {
@@ -100,14 +94,10 @@ function getTriangleArea(aa, bb, cc){
 * added to the map.
 */
 USGSOverlay.prototype.onAdd = function() {
-	console.log("on add");
-	
 	// Create the img element and attach it to the div.
 	var canvas = document.createElement('canvas');
-	canvas.style.border = 'none';
-	canvas.style.borderWidth = '0px';
 	canvas.style.position = 'absolute';
-	canvas.className = "milad-patrick";    
+	canvas.className = $canvasClass;    
 
 	this.canvas_ = canvas;
 
@@ -115,7 +105,7 @@ USGSOverlay.prototype.onAdd = function() {
 	var panes = this.getPanes();
 	panes.overlayImage.appendChild(this.canvas_);
 	
-		var canvas = this.canvas_;
+	var canvas = this.canvas_;
 	// We use the south-west and north-east
 	// coordinates of the overlay to peg it to the correct position and size.
 	// To do this, we need to retrieve the projection from the overlay.
@@ -131,7 +121,7 @@ USGSOverlay.prototype.onAdd = function() {
 	canvas.style.top  = result.minY + 'px';
 	canvas.style.width = (result.maxX - result.minX) + 'px';
 	canvas.style.height = (result.maxY - result.minY) + 'px';
-	canvas.style.opacity =  1;
+	canvas.style.opacity =  $canvasOpacity;
 	
 	var pp1 = convertPosition(p1, result, canvas.width, canvas.height);
 	var pp2 = convertPosition(p2, result, canvas.width, canvas.height);
@@ -154,18 +144,13 @@ USGSOverlay.prototype.onAdd = function() {
 	
 	var triangleGradient = function(point){
 		
-		
 		if (!triangleHere.containsPoint(point) ){
 			return [0, 0, 0, 0];
 		}
 		
 		else{
-
-			
-
 			//var aR = 0;   var aG = 0; var aB=1;  // blue
 			//var bR = 1; var bG = 0; var bB=0;    // red
-
 			
 			var a = triangleHere[0];
 			var b = triangleHere[1];
@@ -198,8 +183,6 @@ USGSOverlay.prototype.onAdd = function() {
 			
 			if ( normalizedAttributeVal > 1 ) normalizedAttributeVal = 1;
 			if ( normalizedAttributeVal < 0 ) normalizedAttributeVal = 0;
-			
-			
 
 			var red   = ( (bR - aR) * normalizedAttributeVal ) + aR;
 			var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
@@ -213,8 +196,6 @@ USGSOverlay.prototype.onAdd = function() {
 };
 
 USGSOverlay.prototype.draw = function() {
-	console.log("on draw");
-
 };
 
 USGSOverlay.prototype.onRemove = function() {
