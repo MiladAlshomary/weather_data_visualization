@@ -118,6 +118,11 @@ USGSOverlay.prototype.onAdd = function() {
 	panes.overlayImage.appendChild(this.canvas_);
 	
 	var canvas = this.canvas_;
+
+};
+
+USGSOverlay.prototype.draw = function() {
+	var canvas = this.canvas_;
 	// We use the south-west and north-east
 	// coordinates of the overlay to peg it to the correct position and size.
 	// To do this, we need to retrieve the projection from the overlay.
@@ -202,9 +207,6 @@ USGSOverlay.prototype.onAdd = function() {
 	}
 	
 	process(this.canvas_, triangleGradient);
-};
-
-USGSOverlay.prototype.draw = function() {
 };
 
 USGSOverlay.prototype.onRemove = function() {

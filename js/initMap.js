@@ -5,7 +5,7 @@ function initMap() {
 		mapTypeId: 'roadmap',
 		scrollwheel:  false
 	});
-	map.setOptions({zoomControl: false, scrollwheel: false, disableDoubleClickZoom: true});
+	map.setOptions({zoomControl: true, scrollwheel: false, disableDoubleClickZoom: false});
 	window.map = map;
 	$map = map;
 }
