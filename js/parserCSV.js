@@ -38,7 +38,7 @@ function parseData(content){
 	
 	$("#timestamp-select option").remove();
 	$.each ($rawData, function(k, pointData){
-		if(pointData.Date !== undefined) {
+		if(pointData.Date !== undefined && pointData.air_temperature !== "") {
 			// initialize array for specific time if not found
 			if ($finalData[pointData.Date] === undefined ){
 				$finalData[pointData.Date] = [];
