@@ -16,3 +16,6 @@ var $canvasOpacity = 0.9;
 
 var $allMapMarkers = [];
 var $allMapPolygons = [];
+
+var $color1 = [0, 0, 255];
+var $color2 = [255, 0, 0];

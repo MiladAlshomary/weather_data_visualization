@@ -12,7 +12,7 @@ html, body {
 	width: 980px;
 	margin: 0 auto;
 	background: #fff;
-	padding: 30px 20px;
+	padding: 20px;
 }
 fieldset{
 	margin: 0;
@@ -22,16 +22,32 @@ fieldset{
 #loading{
 	display: none;
 }
+input[type="text"]{
+	border: none;
+	padding: 5px;
+	width: 100px;
+	cursor: pointer;
+    height: 20px;
+}
 .clearfix:after,.clearfix:before{display:table;content:" "}.clearfix:after{clear:both}
 #top{
 	clear: both;
 	margin: 0 0 40px 0;
+}
+#main{
+	margin-bottom: 40px;
 }
 #site-title{
 	float: left;
 	font-size: 18px;
 	margin: 0;
 	color: #0000ff;
+	padding: 5px;
+	border: 2px solid transparent;
+	-moz-border-image: -moz-linear-gradient(top, #FF0000 0%, #0000FF 100%);
+	-webkit-border-image: -webkit-linear-gradient(top, #FF0000 0%, #0000FF 100%);
+	border-image: linear-gradient(to bottom, #FF0000 0%, #0000FF 100%);
+	border-image-slice: 1;
 }
 #site-title span{
 	color: #ff0000;
@@ -41,11 +57,12 @@ fieldset{
 	float: right;
 	color: #bbb;
 	font-size: 13px;
+	margin-top: 10px;
 	font-weight: normal;
 }
 #map {
 	height: 700px;
-	margin-bottom: 100px;
+	margin-bottom: 80px;
 }
 label{
 	display: inline-block;
@@ -66,8 +83,7 @@ label{
 	line-height: 30px;
 	padding-left: 10px;
 }
-#data-select, #transparency{
-	display: block;
+#transparency{
 	margin: 20px 0;
 }
 #data-select *, #transparency *{
@@ -78,6 +94,36 @@ label{
 }
 #data-select #data-upload{
 	vertical-align: middle;
+}
+#data-select{
+	float: left;
+}
+#timestamp{
+	display: inline-block;
+}
+#attribute-gradient-w{
+	display: none;
+	position: relative;
+	float: right;
+}
+#attribute-gradient{
+	height: 30px;
+	width: 300px;
+	background: red; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(left, blue, red); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(right, blue, red); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(right, blue, red); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(to right, blue, red); /* Standard syntax */
+}
+#min-value{
+	position: absolute;
+	bottom: -20px;
+	left: 0;
+}
+#max-value{
+	position: absolute;
+	bottom: -20px;
+	right: 0;
 }
 
 #main{
@@ -91,4 +137,17 @@ label{
 	margin-right: 25px;
 }
 #transparency .value{
+}
+#refresh-colors{
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 10px;
+	padding: 5px 10px;
+	text-align: center;
+	background: #5cb85c;
+	color: #fff;
+    height: 20px;
+}
+#refresh-colors:hover{
+	opacity: 0.9;
 }
