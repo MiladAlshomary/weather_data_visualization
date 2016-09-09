@@ -1,11 +1,11 @@
 USGSOverlay.prototype = new google.maps.OverlayView();
 
-function drawTriangulation() {
+function drawTriangulation(data, ts, visibility) {
 	var progress = 0;
 	
-	for (i = 0; i < $trianglesTotal; i++){
-		drawTriangleOnMap($triangles[i]);
-		addOverlay($triangles[i]);
+	for (i = 0; i < data.length; i++){
+		//drawTriangleOnMap($triangles[i]);
+		addOverlay($triangles[i], ts, visibility);
 	}
 }
 
@@ -62,8 +62,8 @@ function drawTriangleOnMap(t) {
 	$allMapPolygons.push(polygon);
 }
 
-function addOverlay(triangle){
-	new USGSOverlay(triangle, window.map);
+function addOverlay(triangle, ts, visibility){
+	new USGSOverlay(triangle, window.map, visibility, ts);
 }
 
 function addMarker(lat, lng, name) {
@@ -81,10 +81,12 @@ function addMarkerByXY(x, y) {
 }
 
 /** @constructor */
-function USGSOverlay(triangle, map) {
+function USGSOverlay(triangle, map, visibility, ts) {
 	// Now initialize all properties.
 	this.triangle = triangle;
 	this.map_ = map;
+	this.vis = visibility;
+	this.canvas_class = ts.replace(/:/g, '').replace(/-/g, '');
 	// Define a property to hold the image's div. We'll
 	// actually create this div upon receipt of the onAdd()
 	// method so we'll leave it null for now.
@@ -109,7 +111,8 @@ USGSOverlay.prototype.onAdd = function() {
 	// Create the img element and attach it to the div.
 	var canvas = document.createElement('canvas');
 	canvas.style.position = 'absolute';
-	canvas.className = $canvasClass;    
+	canvas.style.display  = this.vis;
+	canvas.className = $canvasClass + this.canvas_class;
 
 	this.canvas_ = canvas;
 

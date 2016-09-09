@@ -5,7 +5,7 @@ $(window).load(function(){
 	});
 	
 	function cleanupPrevExperiment(){
-		$("." + $canvasClass).remove();
+		//$("." + $canvasClass).remove();
 		deleteMarkers();
 		deletePolygons();
 	}
@@ -18,7 +18,7 @@ $(window).load(function(){
 		
 		// Cleanup previous interpolation
 		cleanupPrevExperiment();
-		
+
 		// console.log(timestamp);
 		triangluate($finalData[timestamp], function(callback){
 			$triangles = callback;
@@ -43,7 +43,24 @@ $(window).load(function(){
 			parseData(contents);
 			
 			// Start triangulation
-			triangulateOnTimestamp($dataTimestamp);
+			//triangulateOnTimestamp($dataTimestamp);
+			$timeStamps = Object.keys($finalData);
+			window.currentTS = 0;
+
+			for (var ts in $finalData) {
+				var data = $finalData[ts];
+				setMinMaxValues(ts);
+				// console.log(timestamp);
+				triangluate(data, function(callback){
+					$triangles = callback;
+					$trianglesTotal = $triangles.length;
+					// when done, draw them
+					drawTriangulation(callback, ts, 'none');
+				});
+			}
+
+			window.setInterval(nextHeatMap, 1000);
+
 		};
 	});
 	
@@ -64,7 +81,20 @@ $(window).load(function(){
 	// Timestamp select
 	$("#timestamp-select").on('change', function(){
 		var timestamp = $(this).find("option:selected" ).val();
-		triangulateOnTimestamp(timestamp);
+		//triangulateOnTimestamp(timestamp);
+		$('.canvas-w' + $dataTimestamp.replace(/:/g, '').replace(/-/g, '')).fadeOut();
+		$('.canvas-w' + timestamp.replace(/:/g, '').replace(/-/g, '')).fadeIn();
+		$dataTimestamp = timestamp;
 	});
 	
 });
+
+function nextHeatMap() {
+	var cts = $timeStamps[window.currentTS];
+	window.currentTS = window.currentTS + 1;
+	var nts = $timeStamps[window.currentTS]; 
+
+	console.log(nts);
+	$('.canvas-w' + cts.replace(/:/g, '').replace(/-/g, '')).fadeOut();
+	$('.canvas-w' + nts.replace(/:/g, '').replace(/-/g, '')).fadeIn();
+}

@@ -10,6 +10,8 @@ var $finalDataMinVal = 150;
 var $finalDataMaxVal = -150;
 
 var $dataTimestamp = "2016-07-24T23:00:00Z";
+var $timeStamps = [];
+var $currentTS = 0;
 
 var $canvasClass = "canvas-w";
 var $canvasOpacity = 0.9;
