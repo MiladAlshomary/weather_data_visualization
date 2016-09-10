@@ -1,8 +1,6 @@
 USGSOverlay.prototype = new google.maps.OverlayView();
 
 function drawTriangulation(data, ts, visibility) {
-	var progress = 0;
-	
 	for (i = 0; i < data.length; i++){
 		//drawTriangleOnMap($triangles[i]);
 		addOverlay($triangles[i], ts, visibility);

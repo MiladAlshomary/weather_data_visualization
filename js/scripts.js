@@ -48,18 +48,21 @@ $(window).load(function(){
 		if (!file) {
 			return;
 		}
-		var reader = new FileReader
-		reader.readAsText(file);
+		
 
+		var reader = new FileReader
 		reader.onload = function(e) {
-			$("#loading-img").show()
+			$("#loading-img").show();
 			var contents = e.target.result;
-			renderAllData(contents, function(){
-				$("#loading-img").hide()
+			renderAllData(contents);
+			setTimeout(function(){
+				$("#loading-img").hide();
 				$("#main").css('opacity', 1);
-			});
+				$("#attribute-gradient-w").show();
+			},10000)
 		};
 
+		reader.readAsText(file);
 	});
 	
 	$("#refresh-colors").on('click', function(){
@@ -67,9 +70,19 @@ $(window).load(function(){
 	});
 	
 	$("#play-triangles").on('click', function(){
-		window.setInterval(nextHeatMap, 1000);
+		if($(this).hasClass('play-triangles')) {
+			window.hm_playback = window.setInterval(nextHeatMap, 1500);
+			$(this).addClass('stop-triangles');
+			$(this).removeClass('play-triangles');
+			$(this).text("Pause Visualization");
+		} else {
+			window.clearInterval(window.hm_playback);
+			$(this).addClass('play-triangles');
+			$(this).removeClass('stop-triangles');
+			$(this).text("Start Visualization")
+		}
 	});
-	
+
 	// Transparency slider
 	$("#transparency .value").html($canvasOpacity);
 	$("#transparency .slider").slider({
@@ -95,34 +108,42 @@ $(window).load(function(){
 	
 });
 
-function renderAllData(contents, callback) {
+function renderAllData(contents) {
 	parseData(contents);
 	// Start triangulation
 	$timeStamps = Object.keys($finalData);
 	window.currentTS = 0;
+	window.allTriangles = {};
 
 	for (var ts in $finalData) {
 		var data = $finalData[ts];
-		setMinMaxValues(ts);
+		//setMinMaxValues(ts);
 		// console.log(timestamp);
 		var result = triangluate(data);
 		$triangles = result;
 		$trianglesTotal = $triangles.length;
+		window.allTriangles[ts] = $triangles;
 		// when done, draw them
 		drawTriangulation(result, ts, 'none');
-	}
-
-	if(callback && typeof(callback) === "function"){
-		callback();
 	}
 }
 
 function nextHeatMap() {
+	if(window.currentTS + 1 >= $timeStamps.length) {
+		window.currentTS = 0;
+	}
+
 	var cts = $timeStamps[window.currentTS];
 	window.currentTS = window.currentTS + 1;
 	var nts = $timeStamps[window.currentTS]; 
-
-	console.log(nts);
 	$('.canvas-w' + cts.replace(/:/g, '').replace(/-/g, '')).fadeOut();
 	$('.canvas-w' + nts.replace(/:/g, '').replace(/-/g, '')).fadeIn();
+
+	$('#current_time').text('Showing:' + nts);
+
+	for (i = 0; i < window.allTriangles[nts].length; i++){
+		var t = window.allTriangles[nts][i];
+		drawTriangleOnMap(t);
+	}
+
 }

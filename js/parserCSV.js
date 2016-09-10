@@ -2,17 +2,19 @@ function setMinMaxValues(timestamp){
 	$finalDataMinVal = 150;
 	$finalDataMaxVal = -150;
 	
-	$.each($finalData[timestamp], function(i, point){
-		var temperature = point.attributes.air_temperature;
-		if ( temperature != "" ){
-			$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
-			$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
-		}
+	$.each($finalData, function(ts, dataofTs){
+		$.each(dataofTs, function(i, point){
+			var temperature = point.attributes.air_temperature;
+			if ( temperature != "" ){
+				$finalDataMinVal = ( temperature < $finalDataMinVal ) ? temperature : $finalDataMinVal;
+				$finalDataMaxVal = ( temperature > $finalDataMaxVal ) ? temperature : $finalDataMaxVal;
+			}
+		});
 	});
 
 	$("#max-value span").html($finalDataMaxVal);
 	$("#min-value span").html($finalDataMinVal);
-	$("#attribute-gradient-w").show();
+	//$("#attribute-gradient-w").show();
 }
 
 function parseData(content){
@@ -62,6 +64,7 @@ function parseData(content){
 		
 		counter++;
 	});
-	
+
+	setMinMaxValues();	
 	return false;
 }
