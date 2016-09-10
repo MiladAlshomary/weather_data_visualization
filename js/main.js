@@ -121,11 +121,6 @@ USGSOverlay.prototype.onAdd = function() {
 	panes.overlayImage.appendChild(this.canvas_);
 	
 	var canvas = this.canvas_;
-
-};
-
-USGSOverlay.prototype.draw = function() {
-	var canvas = this.canvas_;
 	// We use the south-west and north-east
 	// coordinates of the overlay to peg it to the correct position and size.
 	// To do this, we need to retrieve the projection from the overlay.
@@ -152,12 +147,14 @@ USGSOverlay.prototype.draw = function() {
 	var ppp3 = new Point(pp3.x, pp3.y, this.triangle[2].attributes);
 	var triangleHere = new Triangle(ppp1, ppp2, ppp3);
 	
-	colors = [{from:[1,0,0], to:[0,0,1]},{from:[1,1,1], to:[0,0,0]},{from:[0,0,1], to:[0,1,1]},{from:[1,1,1], to:[0,0,0]}];
-	
 	//random
-	var r = 0;//Math.floor((Math.random() * 4) + 0);
-	var aR = colors[r].from[0];   var aG = colors[r].from[1]; var aB=colors[r].from[2];
-	var bR = colors[r].to[0]; var bG = colors[r].to[1]; var bB=colors[r].to[2];
+	var aR = $color1[0];
+	var aG = $color1[1];
+	var aB = $color1[2];
+	
+	var bR = $color2[0];
+	var bG = $color2[1];
+	var bB = $color2[2];
 	
 	var triangleGradient = function(point){
 		
@@ -205,11 +202,14 @@ USGSOverlay.prototype.draw = function() {
 			var green = ( (bG - aG) * normalizedAttributeVal ) + aG;
 			var blue  = ( (bB - aB) * normalizedAttributeVal ) + aB;
 
-			return [red, green, blue, 1];
+			return [red, green, blue, 255];
 		}
 	}
 	
 	process(this.canvas_, triangleGradient);
+};
+
+USGSOverlay.prototype.draw = function() {
 };
 
 USGSOverlay.prototype.onRemove = function() {

@@ -3,7 +3,7 @@ function process(canvas, func) {
 		var index = (x + y * imageData.width) * 4;
 
 		for (var i = 0; i < 4; i++) {
-			imageData.data[index + i] = rgba[i] * 255;
+			imageData.data[index + i] = rgba[i];
 		}
 	}
 

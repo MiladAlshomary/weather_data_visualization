@@ -9,10 +9,11 @@
 		<link rel="stylesheet" href="css/main.css">
 		
 		<script src="js/lib/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="js/lib/date.js"></script>
+    <script src="js/lib/jscolor.min.js"></script>
     <script src="js/lib/hashtable.js"></script>
     <script src="js/lib/hashset.js"></script>
-		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7J1zsErb9_7jxNu5KU5kIENFObAQEbl0&libraries=visualization"></script>
 		<script src="js/globals.js"></script>
 		<script src="js/initMap.js"></script>
@@ -33,9 +34,23 @@
 				<h3 id="site-authors">Patrick Saad, Milad Alshomary</h3>
 			</div>
 		
-			<div id="data-select">
-				<label>Select data file (.csv):</label>
-				<input disabled="disabled" type="file" id="data-upload" />
+			<div class="clearfix">
+				<div id="data-select">
+					<label>Select data file (.csv):</label>
+					<input disabled="disabled" type="file" id="data-upload" />
+				</div>
+          <img style="width: 50px; display: none" src="./imgs/ajax-loading.gif" id="loading-img">
+			</div>
+				
+			<div id="attribute-gradient-w">
+				<div id="attribute-gradient">
+					<div id="min-value">
+						Min: <span></span>
+					</div>
+					<div id="max-value">
+						Max: <span></span>
+					</div>
+				</div>
 			</div>
 			
 			<div id="main">
@@ -52,26 +67,20 @@
 						</fieldset>
 					</form>
 				</div>
-				
-				<div id="min-value">
-					Min: <span></span>
-				</div>
-				<div id="max-value">
-					Max: <span></span>
-				</div>
 			
 				<div id="transparency">
 					<label>Transparency</label>
 					<div class="slider"></div>
 					<div class="value"></div>
 				</div>
-				
-				<div id="loading">Loading: <span></span></div>
-
-				<div id="floating-panel">
-					<input type="button" value="Toggle visibility" onclick="overlay.toggle();"></input>
-					<input type="button" value="Toggle DOM attachment" onclick="overlay.toggleDOM();"></input>
+				<div id="color-picker">
+					<label>Pick Colors</label>
+					<input type="text" id="color-picker-1" onchange="colorpicker(this.jscolor)" class="jscolor" value="00ffff">
+					<input type="text" id="color-picker-2" onchange="colorpicker(this.jscolor)" class="jscolor" value="ff0000">
+					<div class="button" id="refresh-colors">Refresh</div>
 				</div>
+
+        <div id="play-triangles" class="button">Start Visualization</div>
 				
 			</div>
 			

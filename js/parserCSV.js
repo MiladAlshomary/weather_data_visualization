@@ -12,6 +12,7 @@ function setMinMaxValues(timestamp){
 
 	$("#max-value span").html($finalDataMaxVal);
 	$("#min-value span").html($finalDataMinVal);
+	$("#attribute-gradient-w").show();
 }
 
 function parseData(content){
