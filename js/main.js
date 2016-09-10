@@ -112,7 +112,7 @@ USGSOverlay.prototype.onAdd = function() {
 	var canvas = document.createElement('canvas');
 	canvas.style.position = 'absolute';
 	canvas.style.display  = this.vis;
-	canvas.className = $canvasClass + this.canvas_class;
+	canvas.className = 'canvas-w ' +  $canvasClass + this.canvas_class;
 
 	this.canvas_ = canvas;
 
