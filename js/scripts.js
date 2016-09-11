@@ -107,7 +107,7 @@ $(window).load(function(){
 	.on("slide", function( event, ui ) {
 		// when sliding, update the value of the canvas opacity
 		$("#transparency .value").html(ui.value);
-		$("." + $canvasClass).css('opacity', ui.value);
+		$('.canvas-w' + $dataTimestamp.replace(/:/g, '').replace(/-/g, '')).css('opacity', ui.value);
 	});
 	
 	// Timestamp select
@@ -117,6 +117,11 @@ $(window).load(function(){
 		$('.canvas-w' + $dataTimestamp.replace(/:/g, '').replace(/-/g, '')).fadeOut();
 		$('.canvas-w' + timestamp.replace(/:/g, '').replace(/-/g, '')).fadeIn();
 		$dataTimestamp = timestamp;
+
+		for (i = 0; i < window.allTriangles[timestamp].length; i++){
+			var t = window.allTriangles[timestamp][i];
+			drawTriangleOnMap(t);
+		}
 	});
 	
 });
@@ -151,9 +156,9 @@ function nextHeatMap() {
 	var nts = $timeStamps[window.currentTS]; 
 	$('.canvas-w' + cts.replace(/:/g, '').replace(/-/g, '')).fadeOut();
 	$('.canvas-w' + nts.replace(/:/g, '').replace(/-/g, '')).fadeIn();
-
 	$('#current_time').text('Showing:' + nts);
 
+	$dataTimestamp = nts;
 	for (i = 0; i < window.allTriangles[nts].length; i++){
 		var t = window.allTriangles[nts][i];
 		drawTriangleOnMap(t);
