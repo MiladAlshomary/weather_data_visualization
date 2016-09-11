@@ -37,7 +37,7 @@ $(window).load(function(){
 	});
 	
 	function cleanupPrevExperiment(){
-		//$("." + $canvasClass).remove();
+		$("." + $canvasClass).remove();
 		deleteMarkers();
 		deletePolygons();
 	}
@@ -59,7 +59,7 @@ $(window).load(function(){
 				$("#loading-img").hide();
 				$("#main").css('opacity', 1);
 				$("#attribute-gradient-w").show();
-			},10000)
+			},10000);
 		};
 
 		reader.readAsText(file);
@@ -67,6 +67,19 @@ $(window).load(function(){
 	
 	$("#refresh-colors").on('click', function(){
 		//TODO re draw all triangles
+		$("#loading-img").show();
+		cleanupPrevExperiment();
+		
+		for (var key in window.allTriangles) {
+			result = window.allTriangles[key];
+			drawTriangulation(result, key, 'none');
+		}
+		
+
+		setTimeout(function(){
+			$("#loading-img").hide();
+		},10000)
+
 	});
 	
 	$("#play-triangles").on('click', function(){
