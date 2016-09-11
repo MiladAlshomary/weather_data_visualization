@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Weather Visualization 2016 | Patrick Saad, Milad Alshomary</title>
+    <title>Weather Visualization | Milad Alshomary, Patrick Saad - Bauhaus-Universität Weimar | SS16</title>
 		
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 		<link rel="stylesheet" href="css/main.css">
@@ -17,7 +17,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7J1zsErb9_7jxNu5KU5kIENFObAQEbl0&libraries=visualization"></script>
 		<script src="js/globals.js"></script>
 		<script src="js/initMap.js"></script>
-		
     <script src="js/math.js"></script>
 		<script src="js/parserCSV.js"></script>
     <script src="js/graphics.js"></script>
@@ -31,25 +30,24 @@
 		
 			<div id="top" class="clearfix">
 				<h1 id="site-title">Weather <span>Visualization</span></h1>
-				<h3 id="site-authors">Patrick Saad, Milad Alshomary</h3>
-			</div>
-		
-			<div class="clearfix">
-				<div id="data-select">
-					<label>Select data file (.csv):</label>
-					<input disabled="disabled" type="file" id="data-upload" />
+				<h3 id="site-authors">
+				<span>Milad Alshomary, Patrick Saad</span>
+				<span>Visualization</span>
+				<span>Bauhaus-Universität Weimar | SS16</span>
+				</h3>
+				<div id="data-select-w" class="clearfix">
+					<div id="data-select">
+						<label>Select data file (.csv):</label>
+						<input disabled="disabled" type="file" id="data-upload" />
+					</div>
+					<img src="imgs/ajax-loading.gif" id="loading-img">
 				</div>
-          <img style="width: 50px; display: none" src="./imgs/ajax-loading.gif" id="loading-img">
 			</div>
 				
 			<div id="attribute-gradient-w">
 				<div id="attribute-gradient">
-					<div id="min-value">
-						Min: <span></span>
-					</div>
-					<div id="max-value">
-						Max: <span></span>
-					</div>
+					<div id="min-value">Min: <span></span></div>
+					<div id="max-value">Max: <span></span></div>
 				</div>
 			</div>
 			
@@ -57,13 +55,9 @@
 				
 				<div id="timestamp">
 					<form id="form-timestamp" action="#">
-	 
 						<fieldset>
 							<label for="timestamp">Timestamp</label>
-							<select name="timestamp" id="timestamp-select">
-								
-							</select>
-							
+							<select name="timestamp" id="timestamp-select"></select>
 						</fieldset>
 					</form>
 				</div>
@@ -74,14 +68,13 @@
 					<div class="value"></div>
 				</div>
 				
-        <div id="play-triangles" class="button play-triangles">Start Visualization</div><label style="width: 224px;margin-left: 20px;" id="current_time"></label>
+        <div id="play-triangles" class="button play-triangles">Start Visualization</div><label id="current_time"></label>
 				
 			</div>
 			
 			<div id="map"></div>
 			
 		</div>
-				
 		
   </body>
 </html>

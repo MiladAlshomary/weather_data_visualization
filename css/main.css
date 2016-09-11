@@ -8,6 +8,14 @@ html, body {
 	color: #333;
 	background: #fbfbfb;
 }
+input[type="text"]{
+	border: none;
+	padding: 5px;
+	width: 100px;
+	cursor: pointer;
+    height: 20px;
+}
+.clearfix:after,.clearfix:before{display:table;content:" "}.clearfix:after{clear:both}
 .container{
 	width: 980px;
 	margin: 0 auto;
@@ -19,24 +27,42 @@ fieldset{
 	padding: 0;
 	border: none;
 }
+label{
+	display: inline-block;
+	width: 150px;
+	margin-right: 0 !important;
+}
+.button{
+	cursor: pointer;
+	display: inline-block;
+	margin-top: 10px;
+	padding: 5px 10px;
+	text-align: center;
+	background: #5cb85c;
+	color: #fff;
+    height: 20px;
+}
+#data-select-w{
+	float: left;
+	clear: both;
+}
+#data-select-w img{
+	display: none;
+	width: 50px;
+}
+#current_time{
+	width: 300px;
+	margin-left: 20px;
+}
 #loading{
 	display: none;
 }
-input[type="text"]{
-	border: none;
-	padding: 5px;
-	width: 100px;
-	cursor: pointer;
-    height: 20px;
-}
-.clearfix:after,.clearfix:before{display:table;content:" "}.clearfix:after{clear:both}
 #top{
 	clear: both;
-	margin: 0 0 40px 0;
+	margin: 0 0 20px 0;
 }
 #main{
-	margin-bottom: 40px;
-	opacity: 0;
+	display: none;
 }
 #site-title{
 	float: left;
@@ -60,15 +86,16 @@ input[type="text"]{
 	font-size: 13px;
 	margin-top: 10px;
 	font-weight: normal;
+	text-align: right;
+}
+#site-authors span{
+	display: block;
+	margin-bottom: 5px;
 }
 #map {
 	height: 700px;
 	margin-bottom: 80px;
-}
-label{
-	display: inline-block;
-	width: 150px;
-	margin-right: 0 !important;
+	margin-top: 40px;
 }
 #floating-panel {
 	display: none;
@@ -126,25 +153,12 @@ label{
 	bottom: -20px;
 	right: 0;
 }
-
 #transparency span{
 	margin-right: 10px;
 }
 #transparency .slider{
 	width: 125px;
 	margin-right: 25px;
-}
-#transparency .value{
-}
-.button{
-	cursor: pointer;
-	display: inline-block;
-	margin-top: 10px;
-	padding: 5px 10px;
-	text-align: center;
-	background: #5cb85c;
-	color: #fff;
-    height: 20px;
 }
 #refresh-colors{
 	margin-left: 10px;

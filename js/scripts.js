@@ -48,7 +48,6 @@ $(window).load(function(){
 		if (!file) {
 			return;
 		}
-		
 
 		var reader = new FileReader
 		reader.onload = function(e) {
@@ -57,7 +56,7 @@ $(window).load(function(){
 			renderAllData(contents);
 			setTimeout(function(){
 				$("#loading-img").hide();
-				$("#main").css('opacity', 1);
+				$("#main").slideDown();
 				$("#attribute-gradient-w").show();
 			},10000);
 		};
@@ -74,7 +73,6 @@ $(window).load(function(){
 			result = window.allTriangles[key];
 			drawTriangulation(result, key, 'none');
 		}
-		
 
 		setTimeout(function(){
 			$("#loading-img").hide();
@@ -113,7 +111,6 @@ $(window).load(function(){
 	// Timestamp select
 	$("#timestamp-select").on('change', function(){
 		var timestamp = $(this).find("option:selected" ).val();
-		//triangulateOnTimestamp(timestamp);
 		$('.canvas-w' + $dataTimestamp.replace(/:/g, '').replace(/-/g, '')).fadeOut();
 		$('.canvas-w' + timestamp.replace(/:/g, '').replace(/-/g, '')).fadeIn();
 		$dataTimestamp = timestamp;
@@ -135,8 +132,6 @@ function renderAllData(contents) {
 
 	for (var ts in $finalData) {
 		var data = $finalData[ts];
-		//setMinMaxValues(ts);
-		// console.log(timestamp);
 		var result = triangluate(data);
 		$triangles = result;
 		$trianglesTotal = $triangles.length;
@@ -156,8 +151,7 @@ function nextHeatMap() {
 	var nts = $timeStamps[window.currentTS]; 
 	$('.canvas-w' + cts.replace(/:/g, '').replace(/-/g, '')).fadeOut();
 	$('.canvas-w' + nts.replace(/:/g, '').replace(/-/g, '')).fadeIn();
-	$('#current_time').text('Showing:' + nts);
-
+	$('#current_time').text('Showing date: ' + nts);
 	$dataTimestamp = nts;
 	for (i = 0; i < window.allTriangles[nts].length; i++){
 		var t = window.allTriangles[nts][i];
